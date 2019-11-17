@@ -10,6 +10,12 @@
  - Click the run button
  - Hit http://localhost:4567/posts
  
+ #### Running the unit tests
+  - Make sure postgres is running
+  - `createdb acebook-test`
+  - Open project in intellij 
+  - Go to tests and hit run button
+ 
  #### Skills checklist
    
   - [ ] I can create a new endpoint and render a static template view
