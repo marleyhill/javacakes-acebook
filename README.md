@@ -15,6 +15,12 @@
   - `createdb acebook-test`
   - Open project in intellij 
   - Go to tests and hit run button
+  
+ #### Running the feature tests
+  - cd functional_tests
+  - bundle install
+  - `brew cask install chromedriver`
+  - rspec
  
  #### Skills checklist
    
