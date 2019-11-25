@@ -15,12 +15,15 @@ import static spark.Spark.get;
 public class Main {
 
     public static void main(String[] args) {
-        BasicConfigurator.configure();
-
-        Flyway flyway = Flyway.configure().dataSource("jdbc:postgresql://localhost:5432/acebook", null, null).load();
+        String dbName = "acebook";
+        for(String a:args) {
+            dbName = a;
+        }
+        System.out.println(dbName);
+        Flyway flyway = Flyway.configure().dataSource("jdbc:postgresql://localhost:5432/"+dbName, null, null).load();
         flyway.migrate();
 
-        Sql2o sql2o = new Sql2o("jdbc:postgresql://localhost:5432/" + "acebook", null, null, new PostgresQuirks() {
+        Sql2o sql2o = new Sql2o("jdbc:postgresql://localhost:5432/" + dbName, null, null, new PostgresQuirks() {
             {
                 // make sure we use default UUID converter.
                 converters.put(UUID.class, new UUIDConverter());
