@@ -2,8 +2,10 @@
 
 #### Running the application
 
+ - Copy the absolute file path for `V1_create_table.sql`
  - Make sure postgres is running
- - `createdb acebook`
+ - `CREATE DATABASE acebook` & `CREATE DATABASE acebook_test`
+ - Connect to each database and run command `\i ABSOLUTE_PATH_V1_create_table.sql`
  - `brew install maven`
  - `mvn install`
  - Open project in intellij 
@@ -12,7 +14,7 @@
  
  #### Running the unit tests
   - Make sure postgres is running
-  - `createdb acebook-test`
+ - `CREATE DATABASE acebook` & `CREATE DATABASE acebook_test`
   - Open project in intellij 
   - Go to tests and hit run button
   
