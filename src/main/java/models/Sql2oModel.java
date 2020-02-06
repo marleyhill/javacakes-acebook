@@ -27,4 +27,26 @@ public class Sql2oModel implements Model {
         return null;
     }
 
+    @Override
+    public User createUser(String name, String email, String password) {
+        try (Connection conn = sql2o.beginTransaction()) {
+            conn.createQuery("insert into users(name, email, password) VALUES (:name, email, password)")
+                    .addParameter("name", name)
+                    .addParameter("email", email)
+                    .addParameter("password", password)
+                    .executeUpdate();
+            conn.commit();
+
+        try (Connection conn = sql2o.beginTransaction()) {
+            conn.createQuery("insert into users(name, email, password) VALUES (:name, email, password)")
+                    .addParameter("name", name)
+                    .addParameter("email", email)
+                    .addParameter("password", password)
+                    .executeUpdate();
+            conn.commit();
+
+            return
+        }
+    }
+
 }

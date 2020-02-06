@@ -33,7 +33,10 @@ public class Main {
         Model model = new Sql2oModel(sql2o);
 
 
-        get("/", (req, res) -> "Hello World");
+        get("/", (req, res) -> {
+
+            return new ModelAndView(new HashMap(),"templates/index.vtl");
+        }, new VelocityTemplateEngine());
 
 
         get("/posts", (req, res) -> {
