@@ -1,6 +1,5 @@
 package models;
 
-import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
 import java.util.List;
@@ -17,6 +16,7 @@ public class Sql2oModel implements Model {
 
     @Override
     public UUID createPost(String content) {
+
         String insertSql =
                 "insert into posts(content) " +
                 "values (:contentParam)";

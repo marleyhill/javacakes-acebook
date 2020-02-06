@@ -1,10 +1,8 @@
 package models;
 
-import java.sql.Date;
-import java.util.List;
-import java.util.UUID;
-
 import lombok.Data;
+
+import java.util.UUID;
 @Data
 public class Post {
     private UUID post_id;
