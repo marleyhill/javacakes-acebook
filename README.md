@@ -2,10 +2,8 @@
 
 #### Running the application
 
- - Copy the absolute file path for `V1_create_table.sql`
  - Make sure postgres is running
  - `CREATE DATABASE acebook` & `CREATE DATABASE acebook_test`
- - Connect to each database and run command `\i ABSOLUTE_PATH_V1_create_table.sql`
  - `brew install maven`
  - `mvn install`
  - Open project in intellij 
@@ -22,6 +20,7 @@
   - cd functional_tests
   - bundle install
   - `brew cask install chromedriver`
+  - If error `Only works on Chrome XX` then update the Chrome browser to latest version
   - rspec
  
  #### Skills checklist

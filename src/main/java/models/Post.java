@@ -7,5 +7,4 @@ import java.util.UUID;
 public class Post {
     private UUID post_id;
     private String content;
-
 }

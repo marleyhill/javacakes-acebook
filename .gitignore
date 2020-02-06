@@ -97,5 +97,9 @@ modules.xml
 # Log files
 *.log
 
+
+#Target Files
 target/
+
+#.idea Files
 .idea/

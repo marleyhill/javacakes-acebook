@@ -16,8 +16,18 @@ public class Sql2oModel implements Model {
 
     @Override
     public UUID createPost(String content) {
-        //TODO - implement this
-        return null;
+
+        String insertSql =
+                "insert into posts(content) " +
+                "values (:contentParam)";
+        try (Connection conn = sql2o.open()) {
+            UUID postId = UUID.randomUUID();
+            conn.createQuery(insertSql)
+                    .addParameter("content", content)
+                    .executeUpdate();
+            conn.commit();
+            return postId;
+        }
     }
 
     @Override
@@ -26,4 +36,17 @@ public class Sql2oModel implements Model {
         return null;
     }
 
-}
+    @Override
+    public UUID createUser(String name, String email, String password) {
+        try (Connection conn = sql2o.beginTransaction()) {
+            UUID userId = UUID.randomUUID();
+            conn.createQuery("insert into users(name, email, password) VALUES (:name, email, password)")
+                    .addParameter("name", name)
+                    .addParameter("email", email)
+                    .addParameter("password", password)
+                    .executeUpdate();
+            conn.commit();
+            return userId;
+            }
+        }
+    }
