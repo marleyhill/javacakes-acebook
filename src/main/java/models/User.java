@@ -10,8 +10,11 @@ public class User {
         this.email = email;
         this.password = password;
     }
-//    static User createUser(String name, String email, String password) {
-//       User user = new User();
-//       return user;
-//    }
+
+//    public static User createUser() {
+////    }
+//////    static User createUser(String name, String email, String password) {
+//////       User user = new User();
+//////       return user;
+//////    }
 }

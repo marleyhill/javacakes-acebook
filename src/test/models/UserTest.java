@@ -22,11 +22,11 @@ class UserTest {
 //        conn.commit();
 //    }
 
-    @Test
-    public void createUser_createsNewUser() {
-        User testUser = User.createUser();
-        assertThat(testUser, is(instanceOf(User.class)));
-    }
+//    @Test
+//    public void createUser_createsNewUser() {
+//        User testUser = User.createUser();
+//        assertThat(testUser, is(instanceOf(User.class)));
+//    }
 
     @AfterEach
     void tearDown() {
