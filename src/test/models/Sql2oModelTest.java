@@ -25,6 +25,8 @@ class Sql2oModelTest {
         }
     });
 
+    UUID id = UUID.fromString("49921d6e-e210-4f68-ad7a-afac266278cb");
+
     @BeforeAll
     static void setUpClass() {
         BasicConfigurator.configure();
@@ -36,7 +38,7 @@ class Sql2oModelTest {
     void setUp() {
         Connection conn = sql2o.beginTransaction();
         conn.createQuery("insert into posts(post_id, content) VALUES (:post_id, :content)")
-                .addParameter("post_id", 100)
+                .addParameter("post_id", id)
                 .addParameter("content", "example content")
                 .executeUpdate();
 
@@ -53,6 +55,9 @@ class Sql2oModelTest {
 
     @Test
     void createPost() {
+        Model model = new Sql2oModel(sql2o);
+        model.createPost("Test Post");
+        assertEquals(model.getAllPosts().size(), 1);
     }
 
     @Test
