@@ -7,7 +7,6 @@ import java.util.UUID;
 import lombok.Data;
 @Data
 public class Post {
-    private int post_id;
+    private UUID post_id;
     private String content;
-
 }
