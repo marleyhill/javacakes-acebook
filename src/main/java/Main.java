@@ -36,6 +36,30 @@ public class Main {
             return new ModelAndView(new HashMap(), "templates/index.vtl");
         }, new VelocityTemplateEngine());
 
+        post("/user/new", (req, res) -> {
+            String name  = req.queryParams("name");
+            String email = req.queryParams("email");
+            String password = req.queryParams("password");
+
+            model.createUser(name, email, password);
+            req.session().attribute("name", name);
+
+            res.redirect("/posts");
+
+            return null;
+        });
+
+        post("/sessions", (req, res) -> {
+            String email = req.queryParams("email");
+            String password = req.queryParams("password");
+
+
+            req.session().attribute("name" );
+
+            res.redirect("/posts");
+
+            return null;
+        });
 
         get("/posts", (req, res) -> {
 //            if(model.getAllPosts().size() == 0) {
