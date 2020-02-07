@@ -34,7 +34,7 @@ public class Sql2oModel implements Model {
     @Override
     public List<Post> getAllPosts() {
         try (Connection conn = sql2o.open()) {
-            List<Post> posts = conn.createQuery("SELECT * FROM posts")
+            List<Post> posts = conn.createQuery("SELECT * FROM posts ORDER BY time_stamp DESC")
                     .executeAndFetch(Post.class);
             return posts;
         }

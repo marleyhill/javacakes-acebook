@@ -2,6 +2,7 @@ package models;
 
 import org.apache.log4j.BasicConfigurator;
 import org.flywaydb.core.Flyway;
+import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,15 @@ import org.sql2o.quirks.PostgresQuirks;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.UUID;
+
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -62,10 +72,12 @@ class Sql2oModelTest {
         Model model = new Sql2oModel(sql2o);
         model.createPost("Test Post");
         assertEquals(model.getAllPosts().size(), 2);
+        assertThat(model.getAllPosts(), hasToString(new StringContains("Test Post")));
     }
 
     @Test
     void getAllPosts() {
+      // Trying to get visibility for Post objects -- not really a test!!!
         Model model = new Sql2oModel(sql2o);
         List<Post> posts = new ArrayList<Post>();
         posts.add(new Post(postId1, userId, "some kind of message", "2020-02-07"));
@@ -74,5 +86,18 @@ class Sql2oModelTest {
         System.out.println(model.getAllPosts());
         System.out.println(model.getAllPosts().get(0).getClass());
 //        assertEquals(model.getAllPosts().get(0).getContent(), "example content");
+    }
+
+    @Test
+    void getAllPostsHaveTimestamps() {
+        Model model = new Sql2oModel(sql2o);
+        model.getAllPosts();
+        assertThat(model.getAllPosts(), hasToString(new StringContains("time_stamp")));
+    }
+
+    @Test
+    void getAllPostsInReverseChronologicalOrder() {
+        Model model = new Sql2oModel(sql2o);
+        model.getAllPosts();
     }
 }
