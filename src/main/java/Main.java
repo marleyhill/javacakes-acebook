@@ -36,13 +36,17 @@ public class Main {
 
 
         get("/posts", (req, res) -> {
-//            if(model.getAllPosts().size() == 0) {
-//                UUID postId = model.createPost("message body");
-//            }
+            if(model.getAllPosts().size() == 0) {
+                UUID postId = model.createPost("test message body");
+            }
 
-            HashMap posts = new HashMap();
-//            posts.put("posts", model.getAllPosts());
-            return new ModelAndView(posts, "templates/posts.vtl");
+            HashMap postsListings = new HashMap();
+            postsListings.put("posts", model.getAllPosts());
+//            System.out.println(postsListings.get("posts"));
+////            models.Post test = postsListings.get("posts").get(0);
+//            System.out.println(model.getAllPosts().get(0).getContent());
+//            System.out.println(postsListings.get("posts"));
+            return new ModelAndView(postsListings, "templates/posts.vtl");
         }, new VelocityTemplateEngine());
 
         post("/posts/new", (request, response) -> {
