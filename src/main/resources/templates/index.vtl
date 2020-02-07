@@ -5,18 +5,34 @@
     <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
   </head>
   <body>
-    <h2>Sign up to Acebook here</h2>
-    <form action="/user/new" method="POST">
-      Name:<br>
-      <input type="text" name="firstname">
-      <br>
-      Email:<br>
-      <input type="text" name="lastname">
-      <br>
-      Password:<br>
-      <input type="text" name="lastname">
-      <br><br>
-      <input type="submit" value="Submit">
-    </form>
+    <h2>Welcome to Acebook</h2>
+      <h3>Sign up to Acebook here</h3>
+      <form action="/user/new" method="POST">
+        Name:<br>
+        <input type="text" name="name">
+        <br>
+        Email:<br>
+        <input type="text" name="email">
+        <br>
+        Password:<br>
+        <input type="text" name="password">
+        <br><br>
+        <input type="submit" value="Submit">
+      </form>
+
+    <br>
+
+    <h2>Already a member? Log in here: </h2>
+
+     <form action="/session/new" method="POST">
+       Email:<br>
+       <input type="text" name="email">
+       <br>
+       Password:<br>
+       <input type="text" name="password">
+       <br><br>
+       <input type="submit" value="Submit">
+     </form>
+
   </body>
 </html>
