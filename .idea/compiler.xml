@@ -6,11 +6,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="javacakes-acebook" />
         <module name="acebook" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="acebook" target="8" />
+      <module name="javacakes-acebook" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>
