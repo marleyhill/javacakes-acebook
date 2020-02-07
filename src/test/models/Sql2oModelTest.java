@@ -11,9 +11,11 @@ import org.sql2o.Sql2o;
 import org.sql2o.converters.UUIDConverter;
 import org.sql2o.quirks.PostgresQuirks;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class Sql2oModelTest {
 
@@ -27,6 +29,7 @@ class Sql2oModelTest {
 
     UUID userId = UUID.fromString("49921d6e-e210-4f68-ad7a-afac266278cb");
     UUID postId = UUID.fromString("59921d6e-e210-4f68-ad7a-afac266278cb");
+    UUID postId1 = UUID.fromString("69921d6e-e210-4f68-ad7a-afac266278cb");
 
     @BeforeAll
     static void setUpClass() {
@@ -64,7 +67,12 @@ class Sql2oModelTest {
     @Test
     void getAllPosts() {
         Model model = new Sql2oModel(sql2o);
-        model.getAllPosts();
-        assertEquals(model.getAllPosts().size(), 1);
+        List<Post> posts = new ArrayList<Post>();
+        posts.add(new Post(postId1, userId, "some kind of message", "2020-02-07"));
+        System.out.println(posts);
+        System.out.println("-------------------");
+        System.out.println(model.getAllPosts());
+        System.out.println(model.getAllPosts().get(0).getClass());
+//        assertEquals(model.getAllPosts().get(0).getContent(), "example content");
     }
 }

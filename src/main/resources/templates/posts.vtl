@@ -7,21 +7,19 @@
   <body>
     <h1>Welcome to acebook</h1>
 
-    <p>This is a test post</p>
-
-    <ul>
-      #foreach( $p in $posts )
-        <li>$p.content</li>
-      <li>$p.content</li>
-      #end
-    </ul>
-    <br><br>
-
     <form action='/posts/new' method="POST">
       <div class="form-group">
         <input id="post" type="text" name="post">
       </div>
       <button type="Submit" name="Submit" value="Submit" class="btn">Submit</button>
     </form>
+
+    <ul>
+      #foreach($p in $posts)
+        <li>$p.content</li>
+      #end
+    </ul>
+    <br><br>
   </body>
+
 </html>
