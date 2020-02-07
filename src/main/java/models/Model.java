@@ -9,6 +9,7 @@ public interface Model {
     List getAllPosts();
 
     UUID createUser(String name, String email, String password);
+    List getAllUsers();
 }
 
 

@@ -1,20 +1,14 @@
 package models;
 
+import lombok.Data;
+import java.util.UUID;
+
+@Data
 public class User {
-    private int userId;
+    private UUID user_id;
     private String name;
     private String email;
     private String password;
-    public User(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
 
-//    public static User createUser() {
-////    }
-//////    static User createUser(String name, String email, String password) {
-//////       User user = new User();
-//////       return user;
-//////    }
+
 }

@@ -25,7 +25,6 @@ class Sql2oModelTest {
         }
     });
 
-    UUID userId = UUID.fromString("49921d6e-e210-4f68-ad7a-afac266278cb");
     UUID postId = UUID.fromString("59921d6e-e210-4f68-ad7a-afac266278cb");
 
     @BeforeAll
@@ -38,6 +37,14 @@ class Sql2oModelTest {
     @BeforeEach
     void setUp() {
         Connection conn = sql2o.beginTransaction();
+        UUID userId = UUID.fromString("39921d6e-e210-4f68-ad7a-afac266278cb");
+        conn.createQuery("INSERT INTO users (user_id, name, email, password) VALUES (:user_id, :name, :email, :password)")
+                .addParameter("user_id", userId)
+                .addParameter("name", "Test Person 1")
+                .addParameter("email", "person1@test.com")
+                .addParameter("password", "password")
+                .executeUpdate();
+
         conn.createQuery("INSERT INTO posts (post_id, user_id, content) VALUES (:post_id, :user_id, :content)")
                 .addParameter("post_id", postId)
                 .addParameter("user_id", userId)
@@ -49,13 +56,30 @@ class Sql2oModelTest {
     @AfterEach
     void tearDown() {
         Connection conn = sql2o.beginTransaction();
-        conn.createQuery("TRUNCATE TABLE posts CASCADE")
+        conn.createQuery("TRUNCATE TABLE users CASCADE")
                 .executeUpdate();
         conn.commit();
     }
 
     @Test
+    void createUser() {
+        Model model = new Sql2oModel(sql2o);
+        model.createUser("Test Person 2", "person2@test.com", "password");
+        assertEquals(model.getAllUsers().size(), 2);
+    }
+
+    @Test
     void createPost() {
+        Connection conn = sql2o.beginTransaction();
+        UUID userId = UUID.fromString("49921d6e-e210-4f68-ad7a-afac266278cb");
+        conn.createQuery("INSERT INTO users (user_id, name, email, password) VALUES (:user_id, :name, :email, :password)")
+                .addParameter("user_id", userId)
+                .addParameter("name", "Test Person 1")
+                .addParameter("email", "person1@test.com")
+                .addParameter("password", "password")
+                .executeUpdate();
+        conn.commit();
+
         Model model = new Sql2oModel(sql2o);
         model.createPost("Test Post");
         assertEquals(model.getAllPosts().size(), 2);
@@ -67,4 +91,6 @@ class Sql2oModelTest {
         model.getAllPosts();
         assertEquals(model.getAllPosts().size(), 1);
     }
+
+
 }
