@@ -99,7 +99,7 @@ modules.xml
 
 
 #Target Files
-target/
+target/**
 
 #.idea Files
-.idea/
+.idea/**
