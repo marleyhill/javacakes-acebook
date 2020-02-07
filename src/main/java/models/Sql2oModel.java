@@ -1,5 +1,6 @@
 package models;
 
+import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
 import java.util.List;
@@ -14,15 +15,15 @@ public class Sql2oModel implements Model {
 
     }
 
+    UUID userId = UUID.fromString("49921d6e-e210-4f68-ad7a-afac266278cb");
+
     @Override
     public UUID createPost(String content) {
-
-        String insertSql =
-                "insert into posts(content) " +
-                "values (:contentParam)";
-        try (Connection conn = sql2o.open()) {
+        try (Connection conn = sql2o.beginTransaction()) {
             UUID postId = UUID.randomUUID();
-            conn.createQuery(insertSql)
+            conn.createQuery("INSERT INTO posts (post_id, user_id, content) VALUES (:post_id, :user_id, :content)")
+                    .addParameter("post_id", postId)
+                    .addParameter("user_id", userId)
                     .addParameter("content", content)
                     .executeUpdate();
             conn.commit();
@@ -32,8 +33,11 @@ public class Sql2oModel implements Model {
 
     @Override
     public List<Post> getAllPosts() {
-        //TODO - implement this
-        return null;
+        try (Connection conn = sql2o.open()) {
+            List<Post> posts = conn.createQuery("SELECT * FROM posts")
+                    .executeAndFetch(Post.class);
+            return posts;
+        }
     }
 
     @Override
