@@ -15,12 +15,12 @@ public class Sql2oModel implements Model {
 
     }
 
-    UUID userId = UUID.fromString("49921d6e-e210-4f68-ad7a-afac266278cb");
+ //   UUID userId = UUID.fromString("49921d6e-e210-4f68-ad7a-afac266278cb");
 
     @Override
     public UUID createUser(String name, String email, String password) {
         try (Connection conn = sql2o.beginTransaction()) {
-//            UUID userId = UUID.randomUUID();
+            UUID userId = UUID.randomUUID();
             conn.createQuery("insert into users(user_id, name, email, password) VALUES (:user_id, :name, :email, :password)")
                     .addParameter("user_id", userId)
                     .addParameter("name", name)
@@ -69,7 +69,16 @@ public class Sql2oModel implements Model {
     }
 
     @Override
-    public UUID createPost(String content) {
+    public UUID getUserId(String email) {
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery("SELECT user_id FROM users WHERE email = '" + email + "'")
+                    .executeScalar(UUID.class);
+
+        }
+    }
+
+    @Override
+    public UUID createPost(String content, UUID userId) {
         try (Connection conn = sql2o.beginTransaction()) {
             UUID postId = UUID.randomUUID();
             conn.createQuery("INSERT INTO posts (post_id, user_id, content) VALUES (:post_id, :user_id, :content)")
