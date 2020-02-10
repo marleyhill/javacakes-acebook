@@ -16,4 +16,9 @@ public class User {
         this.password = password;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
+
 }
