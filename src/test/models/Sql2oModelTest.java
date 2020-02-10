@@ -63,6 +63,12 @@ class Sql2oModelTest {
                 .addParameter("user_id", userId)
                 .addParameter("content", "example content")
                 .executeUpdate();
+
+        conn.createQuery("INSERT INTO posts (post_id, user_id, content) VALUES (:post_id, :user_id, :content)")
+                .addParameter("post_id", postId1)
+                .addParameter("user_id", userId)
+                .addParameter("content", "example content 2")
+                .executeUpdate();
         conn.commit();
     }
 
@@ -79,7 +85,7 @@ class Sql2oModelTest {
         Model model = new Sql2oModel(sql2o);
         model.createUser("Test Person 2", "person2@test.com", "password");
         assertEquals(model.getAllUsers().size(), 2);
-        assertThat(model.getAllUsers(), hasToString(new StringContains("Test Person 2")));
+        assertThat(model.getAllUsers(), hasToString(containsString("Test Person 2")));
     }
 
     @Test
@@ -96,29 +102,22 @@ class Sql2oModelTest {
 
         Model model = new Sql2oModel(sql2o);
         model.createPost("Test Post");
-        assertEquals(model.getAllPosts().size(), 2);
-        assertThat(model.getAllPosts(), hasToString(new StringContains("Test Post")));
+        assertEquals(model.getAllPosts().size(), 3);
+        assertThat(model.getAllPosts(), hasToString(containsString("Test Post")));
     }
 
     @Test
     void getAllPosts() {
         Model model = new Sql2oModel(sql2o);
         model.getAllPosts();
-        assertThat(model.getAllPosts(), hasToString(new StringContains("example content")));
+        assertThat(model.getAllPosts(), hasToString(containsString("example content")));
+        assertThat(model.getAllPosts(), hasToString(startsWith("[Post{post_id=59921d6e-e210-4f68-ad7a-afac266278cb")));
     }
 
     @Test
     void getAllPostsHaveTimestamps() {
         Model model = new Sql2oModel(sql2o);
         model.getAllPosts();
-        assertThat(model.getAllPosts(), hasToString(new StringContains("time_stamp")));
+        assertThat(model.getAllPosts(), hasToString(containsString("time_stamp")));
     }
-
-    @Test
-    void getAllPostsInReverseChronologicalOrder() {
-        Model model = new Sql2oModel(sql2o);
-        model.getAllPosts();
-    }
-
-
 }
