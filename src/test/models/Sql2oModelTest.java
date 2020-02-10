@@ -101,7 +101,7 @@ class Sql2oModelTest {
         conn.commit();
 
         Model model = new Sql2oModel(sql2o);
-        model.createPost("Test Post");
+        model.createPost("Test Post", userId);
         assertEquals(model.getAllPosts().size(), 3);
         assertThat(model.getAllPosts(), hasToString(containsString("Test Post")));
     }

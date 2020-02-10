@@ -43,7 +43,7 @@ public class Main {
 
             UUID userId = model.createUser(name, email, password);
             req.session().attribute("name", name);
-            req.session().attribute("session-id", userId);
+            req.session().attribute("userId", userId);
 
             res.redirect("/posts");
 
@@ -54,14 +54,15 @@ public class Main {
             String email = req.queryParams("login-email");
             String password = req.queryParams("login-password");
             String name;
+            UUID userId;
 
             if (model.authenticate(email, password) == true) {
-                System.out.println("***********************");
-                System.out.println(email);
                 name = model.getName(email);
-                System.out.println(name);
+                userId = model.getUserId(email);
+
                 req.session().attribute("name", name);
                 req.session().attribute("isSignedIn", true);
+                req.session().attribute("userId", userId);
                 res.redirect("/posts");
             } else {
                 res.redirect("/");
@@ -72,10 +73,12 @@ public class Main {
 
         get("/posts", (req, res) -> {
             if(model.getAllPosts().size() == 0) {
-                UUID postId = model.createPost("test message body");
+                UUID userId = UUID.fromString("49921d6e-e210-4f68-ad7a-afac266278cb");
+                UUID postId = model.createPost("test message body", userId);
             }
 
             String name = req.session().attribute("name");
+            UUID userId = req.session().attribute("userId");
             Boolean isSignedIn = req.session().attribute("isSignedIn");
 //
 //            if (isSignedIn == true) {
@@ -86,13 +89,15 @@ public class Main {
             HashMap postsListings = new HashMap();
             postsListings.put("posts", model.getAllPosts());
             postsListings.put("name", name);
+            postsListings.put("userId", userId);
             return new ModelAndView(postsListings, "templates/posts.vtl");
         }, new VelocityTemplateEngine());
 
-        post("/posts/new", (request, response) -> {
-            String content = request.queryParams("post");
-            model.createPost(content);
-            response.redirect("/posts");
+        post("/posts/new", (req, res) -> {
+            String content = req.queryParams("post");
+            UUID userId = req.session().attribute("userId");
+            model.createPost(content, userId);
+            res.redirect("/posts");
             return null;
         });
     }
