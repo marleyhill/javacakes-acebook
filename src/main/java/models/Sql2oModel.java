@@ -42,6 +42,33 @@ public class Sql2oModel implements Model {
     }
 
     @Override
+    public boolean authenticate(String email, String password) {
+        boolean correctLoginDetails = false;
+
+        try (Connection conn = sql2o.open()) {
+            List<User> authenticatedUser = conn.createQuery("SELECT * FROM users WHERE email = '" + email + "'")
+                    .executeAndFetch(User.class);
+
+            if (authenticatedUser == null) {
+                return correctLoginDetails;
+            } else if (authenticatedUser.toString().contains(password)) {
+                correctLoginDetails = true;
+            }
+        }
+
+        return correctLoginDetails;
+    }
+
+    @Override
+    public String getName(String email) {
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery("SELECT name FROM users WHERE email = '" + email + "'")
+                    .executeScalar(String.class);
+
+        }
+    }
+
+    @Override
     public UUID createPost(String content) {
         try (Connection conn = sql2o.beginTransaction()) {
             UUID postId = UUID.randomUUID();

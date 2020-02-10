@@ -10,6 +10,8 @@ public interface Model {
 
     UUID createUser(String name, String email, String password);
     List getAllUsers();
+    boolean authenticate(String email, String password);
+    String getName(String email);
 }
 
 

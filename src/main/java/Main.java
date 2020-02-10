@@ -41,22 +41,31 @@ public class Main {
             String email = req.queryParams("email");
             String password = req.queryParams("password");
 
-            model.createUser(name, email, password);
+            UUID userId = model.createUser(name, email, password);
             req.session().attribute("name", name);
+            req.session().attribute("session-id", userId);
 
             res.redirect("/posts");
 
             return null;
         });
 
-        post("/sessions", (req, res) -> {
-            String email = req.queryParams("email");
-            String password = req.queryParams("password");
+        post("/session", (req, res) -> {
+            String email = req.queryParams("login-email");
+            String password = req.queryParams("login-password");
+            String name;
 
-
-            req.session().attribute("name" );
-
-            res.redirect("/posts");
+            if (model.authenticate(email, password) == true) {
+                System.out.println("***********************");
+                System.out.println(email);
+                name = model.getName(email);
+                System.out.println(name);
+                req.session().attribute("name", name);
+                req.session().attribute("isSignedIn", true);
+                res.redirect("/posts");
+            } else {
+                res.redirect("/");
+            }
 
             return null;
         });
@@ -66,12 +75,17 @@ public class Main {
                 UUID postId = model.createPost("test message body");
             }
 
+            String name = req.session().attribute("name");
+            Boolean isSignedIn = req.session().attribute("isSignedIn");
+//
+//            if (isSignedIn == true) {
+//
+//            } else {
+//                res.redirect("/");
+//            }
             HashMap postsListings = new HashMap();
             postsListings.put("posts", model.getAllPosts());
-//            System.out.println(postsListings.get("posts"));
-////            models.Post test = postsListings.get("posts").get(0);
-//            System.out.println(model.getAllPosts().get(0).getContent());
-//            System.out.println(postsListings.get("posts"));
+            postsListings.put("name", name);
             return new ModelAndView(postsListings, "templates/posts.vtl");
         }, new VelocityTemplateEngine());
 
