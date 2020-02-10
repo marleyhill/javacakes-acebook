@@ -63,15 +63,11 @@ public class Main {
 
         get("/posts", (req, res) -> {
             if(model.getAllPosts().size() == 0) {
+                UUID userId = UUID.fromString("39921d6e-e210-4f68-ad7a-afac266278cb");
                 UUID postId = model.createPost("test message body");
             }
-
             HashMap postsListings = new HashMap();
             postsListings.put("posts", model.getAllPosts());
-//            System.out.println(postsListings.get("posts"));
-////            models.Post test = postsListings.get("posts").get(0);
-//            System.out.println(model.getAllPosts().get(0).getContent());
-//            System.out.println(postsListings.get("posts"));
             return new ModelAndView(postsListings, "templates/posts.vtl");
         }, new VelocityTemplateEngine());
 

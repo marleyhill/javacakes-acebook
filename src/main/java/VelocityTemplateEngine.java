@@ -81,6 +81,7 @@ public class VelocityTemplateEngine extends TemplateEngine {
         if (model instanceof Map) {
             Map<?, ?> modelMap = (Map<?, ?>) model;
             VelocityContext context = new VelocityContext(modelMap);
+            context.put("postMethods", models.Post.class);
             StringWriter writer = new StringWriter();
             template.merge(context, writer);
             return writer.toString();

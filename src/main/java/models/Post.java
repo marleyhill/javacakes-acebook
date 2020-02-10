@@ -2,6 +2,9 @@ package models;
 
 import lombok.Data;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 @Data
@@ -31,4 +34,27 @@ public class Post {
     public String getContent() {
         return this.content;
     }
+
+//    public String getDate() {
+//        SimpleDateFormat sdf = new SimpleDateFormat("dd/M/yyyy");
+//        String date = sdf.format(this.time_stamp);
+//        return date;
+//    }
+//
+//    public String getTime() {
+//        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+//        String time = sdf.format(this.time_stamp);
+//        return time;
+//    }
+
+    public String getTimeStamp() throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = sdf.parse(this.time_stamp);
+        SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat sdfTime = new SimpleDateFormat("hh:mm:ss");
+        String dateStr = sdfDate.format(date);
+        String timeStr = sdfTime.format(date);
+        return "Posted  on: " + dateStr + " at: " + timeStr;
+    }
+
 }
