@@ -39,6 +39,8 @@ class Sql2oModelTest {
 
     UUID postId = UUID.fromString("59921d6e-e210-4f68-ad7a-afac266278cb");
     UUID postId1 = UUID.fromString("69921d6e-e210-4f68-ad7a-afac266278cb");
+    UUID commentId = UUID.fromString("19921d6e-e210-4f68-ad7a-afac266278cb");
+
 
     @BeforeAll
     static void setUpClass() {
@@ -63,6 +65,19 @@ class Sql2oModelTest {
                 .addParameter("user_id", userId)
                 .addParameter("content", "example content")
                 .executeUpdate();
+
+        conn.createQuery("INSERT INTO posts (post_id, user_id, content) VALUES (:post_id, :user_id, :content)")
+                .addParameter("post_id", postId1)
+                .addParameter("user_id", userId)
+                .addParameter("content", "example content 2")
+                .executeUpdate();
+
+        conn.createQuery("INSERT INTO comments (comment_id, post_id, user_id, content) VALUES (:comment_id, :post_id, :user_id, :content)")
+                .addParameter("comment_id", commentId)
+                .addParameter("post_id", postId)
+                .addParameter("user_id", userId)
+                .addParameter("content", "Test Comment")
+                .executeUpdate();
         conn.commit();
     }
 
@@ -79,7 +94,14 @@ class Sql2oModelTest {
         Model model = new Sql2oModel(sql2o);
         model.createUser("Test Person 2", "person2@test.com", "password");
         assertEquals(model.getAllUsers().size(), 2);
-        assertThat(model.getAllUsers(), hasToString(new StringContains("Test Person 2")));
+        assertThat(model.getAllUsers(), hasToString(containsString("Test Person 2")));
+    }
+
+    @Test
+    void authenticate() {
+        Model model = new Sql2oModel(sql2o);
+        boolean signInAttempt = model.authenticate("person1@test.com", "password");
+        assertThat(signInAttempt, equalTo(true));
     }
 
     @Test
@@ -95,30 +117,63 @@ class Sql2oModelTest {
         conn.commit();
 
         Model model = new Sql2oModel(sql2o);
-        model.createPost("Test Post");
-        assertEquals(model.getAllPosts().size(), 2);
-        assertThat(model.getAllPosts(), hasToString(new StringContains("Test Post")));
+        model.createPost("Test Post", userId);
+        assertEquals(model.getAllPosts().size(), 3);
+        assertThat(model.getAllPosts(), hasToString(containsString("Test Post")));
     }
 
     @Test
     void getAllPosts() {
         Model model = new Sql2oModel(sql2o);
         model.getAllPosts();
-        assertThat(model.getAllPosts(), hasToString(new StringContains("example content")));
+        assertThat(model.getAllPosts(), hasToString(containsString("example content")));
+        assertThat(model.getAllPosts(), hasToString(startsWith("[Post{post_id=59921d6e-e210-4f68-ad7a-afac266278cb")));
     }
 
     @Test
     void getAllPostsHaveTimestamps() {
         Model model = new Sql2oModel(sql2o);
         model.getAllPosts();
-        assertThat(model.getAllPosts(), hasToString(new StringContains("time_stamp")));
+        assertThat(model.getAllPosts(), hasToString(containsString("time_stamp")));
     }
 
     @Test
-    void getAllPostsInReverseChronologicalOrder() {
+    void getAllComments() {
         Model model = new Sql2oModel(sql2o);
-        model.getAllPosts();
+        model.getAllComments();
+        assertThat(model.getAllComments(), hasToString(containsString("Test Comment")));
     }
 
+    @Test
+    void createComment() {
+        Connection conn = sql2o.beginTransaction();
+        UUID userId = UUID.fromString("49921d6e-e210-4f68-ad7a-afac266278cb");
+        conn.createQuery("INSERT INTO users (user_id, name, email, password) VALUES (:user_id, :name, :email, :password)")
+                .addParameter("user_id", userId)
+                .addParameter("name", "Test Person 1")
+                .addParameter("email", "person1@test.com")
+                .addParameter("password", "password")
+                .executeUpdate();
+        conn.commit();
 
+        Model model = new Sql2oModel(sql2o);
+        model.createComment("Second Comment", userId, postId);
+        assertThat(model.getAllComments(), hasToString(containsString("Second Comment")));
+    }
+  
+    @Test
+    void getName() {
+        Model model = new Sql2oModel(sql2o);
+        String name = model.getName("person1@test.com");
+        assertEquals(name, "Test Person 1");
+    }
+
+    @Test
+    void getUserId() {
+        Model model = new Sql2oModel(sql2o);
+        UUID userId = model.getUserId("person1@test.com");
+        String userIdAsString = userId.toString();
+        assertEquals(userIdAsString, "39921d6e-e210-4f68-ad7a-afac266278cb");
+
+    }
 }

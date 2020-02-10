@@ -41,40 +41,69 @@ public class Main {
             String email = req.queryParams("email");
             String password = req.queryParams("password");
 
-            model.createUser(name, email, password);
+            UUID userId = model.createUser(name, email, password);
             req.session().attribute("name", name);
+            req.session().attribute("userId", userId);
 
             res.redirect("/posts");
 
             return null;
         });
 
-        post("/sessions", (req, res) -> {
-            String email = req.queryParams("email");
-            String password = req.queryParams("password");
+        post("/session", (req, res) -> {
+            String email = req.queryParams("login-email");
+            String password = req.queryParams("login-password");
+            String name;
+            UUID userId;
 
+            if (model.authenticate(email, password) == true) {
+                name = model.getName(email);
+                userId = model.getUserId(email);
 
-            req.session().attribute("name" );
-
-            res.redirect("/posts");
+                req.session().attribute("name", name);
+                req.session().attribute("isSignedIn", true);
+                req.session().attribute("userId", userId);
+                res.redirect("/posts");
+            } else {
+                res.redirect("/");
+            }
 
             return null;
         });
 
         get("/posts", (req, res) -> {
             if(model.getAllPosts().size() == 0) {
-                UUID userId = UUID.fromString("39921d6e-e210-4f68-ad7a-afac266278cb");
-                UUID postId = model.createPost("test message body");
+                UUID userId = UUID.fromString("49921d6e-e210-4f68-ad7a-afac266278cb");
+                UUID postId = model.createPost("test message body", userId);
             }
+
+            String name = req.session().attribute("name");
+            UUID userId = req.session().attribute("userId");
+            Boolean isSignedIn = req.session().attribute("isSignedIn");
+//
+//            if (isSignedIn == true) {
+//
+//            } else {
+//                res.redirect("/");
+//            }
             HashMap postsListings = new HashMap();
             postsListings.put("posts", model.getAllPosts());
+            postsListings.put("name", name);
+            postsListings.put("userId", userId);
             return new ModelAndView(postsListings, "templates/posts.vtl");
         }, new VelocityTemplateEngine());
 
-        post("/posts/new", (request, response) -> {
-            String content = request.queryParams("post");
-            model.createPost(content);
-            response.redirect("/posts");
+        post("/posts/new", (req, res) -> {
+            String content = req.queryParams("post");
+            UUID userId = req.session().attribute("userId");
+            model.createPost(content, userId);
+            res.redirect("/posts");
+            return null;
+        });
+
+        post("session/destroy", (req, res) -> {
+            req.session().invalidate();
+            res.redirect("/");
             return null;
         });
     }
