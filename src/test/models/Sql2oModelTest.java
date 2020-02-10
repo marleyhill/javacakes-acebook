@@ -39,6 +39,8 @@ class Sql2oModelTest {
 
     UUID postId = UUID.fromString("59921d6e-e210-4f68-ad7a-afac266278cb");
     UUID postId1 = UUID.fromString("69921d6e-e210-4f68-ad7a-afac266278cb");
+    UUID commentId = UUID.fromString("19921d6e-e210-4f68-ad7a-afac266278cb");
+
 
     @BeforeAll
     static void setUpClass() {
@@ -68,6 +70,13 @@ class Sql2oModelTest {
                 .addParameter("post_id", postId1)
                 .addParameter("user_id", userId)
                 .addParameter("content", "example content 2")
+                .executeUpdate();
+
+        conn.createQuery("INSERT INTO comments (comment_id, post_id, user_id, content) VALUES (:comment_id, :post_id, :user_id, :content)")
+                .addParameter("comment_id", commentId)
+                .addParameter("post_id", postId)
+                .addParameter("user_id", userId)
+                .addParameter("content", "Test Comment")
                 .executeUpdate();
         conn.commit();
     }
@@ -119,5 +128,29 @@ class Sql2oModelTest {
         Model model = new Sql2oModel(sql2o);
         model.getAllPosts();
         assertThat(model.getAllPosts(), hasToString(containsString("time_stamp")));
+    }
+
+    @Test
+    void getAllComments() {
+        Model model = new Sql2oModel(sql2o);
+        model.getAllComments();
+        assertThat(model.getAllComments(), hasToString(containsString("Test Comment")));
+    }
+
+    @Test
+    void createComment() {
+        Connection conn = sql2o.beginTransaction();
+        UUID userId = UUID.fromString("49921d6e-e210-4f68-ad7a-afac266278cb");
+        conn.createQuery("INSERT INTO users (user_id, name, email, password) VALUES (:user_id, :name, :email, :password)")
+                .addParameter("user_id", userId)
+                .addParameter("name", "Test Person 1")
+                .addParameter("email", "person1@test.com")
+                .addParameter("password", "password")
+                .executeUpdate();
+        conn.commit();
+
+        Model model = new Sql2oModel(sql2o);
+        model.createComment("Second Comment", userId, postId);
+        assertThat(model.getAllComments(), hasToString(containsString("Second Comment")));
     }
 }
