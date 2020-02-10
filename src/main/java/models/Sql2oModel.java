@@ -99,5 +99,29 @@ public class Sql2oModel implements Model {
             return posts;
         }
     }
+
+    @Override
+    public List<Comment> getAllComments() {
+        try (Connection conn = sql2o.open()) {
+            List<Comment> comments = conn.createQuery("SELECT * FROM comments")
+                    .executeAndFetch(Comment.class);
+            return comments;
+        }
+    }
+
+    @Override
+    public UUID createComment(String content, UUID userId, UUID postId) {
+        try (Connection conn = sql2o.beginTransaction()) {
+            UUID commentId = UUID.randomUUID();
+            conn.createQuery("INSERT INTO comments (comment_id, post_id, user_id, content) VALUES (:comment_id, :post_id, :user_id, :content)")
+                    .addParameter("comment_id", commentId)
+                    .addParameter("post_id", postId)
+                    .addParameter("user_id", userId)
+                    .addParameter("content", content)
+                    .executeUpdate();
+            conn.commit();
+            return commentId;
+        }
+    }
 }
 

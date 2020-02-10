@@ -13,6 +13,9 @@ public interface Model {
     boolean authenticate(String email, String password);
     String getName(String email);
     UUID getUserId(String email);
+
+    UUID createComment(String content, UUID userId, UUID postId);
+    List getAllComments();
 }
 
 
