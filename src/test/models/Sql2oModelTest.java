@@ -98,6 +98,13 @@ class Sql2oModelTest {
     }
 
     @Test
+    void authenticate() {
+        Model model = new Sql2oModel(sql2o);
+        boolean signInAttempt = model.authenticate("person1@test.com", "password");
+        assertThat(signInAttempt, equalTo(true));
+    }
+
+    @Test
     void createPost() {
         Connection conn = sql2o.beginTransaction();
         UUID userId = UUID.fromString("49921d6e-e210-4f68-ad7a-afac266278cb");
@@ -152,5 +159,21 @@ class Sql2oModelTest {
         Model model = new Sql2oModel(sql2o);
         model.createComment("Second Comment", userId, postId);
         assertThat(model.getAllComments(), hasToString(containsString("Second Comment")));
+    }
+  
+    @Test
+    void getName() {
+        Model model = new Sql2oModel(sql2o);
+        String name = model.getName("person1@test.com");
+        assertEquals(name, "Test Person 1");
+    }
+
+    @Test
+    void getUserId() {
+        Model model = new Sql2oModel(sql2o);
+        UUID userId = model.getUserId("person1@test.com");
+        String userIdAsString = userId.toString();
+        assertEquals(userIdAsString, "39921d6e-e210-4f68-ad7a-afac266278cb");
+
     }
 }
