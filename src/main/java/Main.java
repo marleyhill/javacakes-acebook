@@ -100,5 +100,11 @@ public class Main {
             res.redirect("/posts");
             return null;
         });
+
+        post("session/destroy", (req, res) -> {
+            req.session().invalidate();
+            res.redirect("/");
+            return null;
+        });
     }
 }
