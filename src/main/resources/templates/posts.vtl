@@ -21,13 +21,15 @@
       </div>
       <button type="Submit" name="Submit" value="Submit" class="btn">Submit</button>
     </form>
-
+    <br><br>
+    <div class="posts-listings">
     <ul>
       #foreach($p in $posts)
-        <li>$p.content</li>
+        <li>$p.content<br><br>$p.getTimeStamp()<br><br></li>
       #end
     </ul>
-    <br><br>
+    </div>
+
   </body>
 
 </html>

@@ -9,7 +9,7 @@ CREATE TABLE posts (
     post_id VARCHAR UNIQUE,
     user_id VARCHAR REFERENCES users(user_id),
     content VARCHAR(2000),
-    time_stamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    time_stamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP(0)
 );
 
 CREATE TABLE post_likes (
@@ -23,7 +23,7 @@ CREATE TABLE comments (
     post_id VARCHAR REFERENCES posts(post_id),
     user_id VARCHAR REFERENCES users(user_id),
     content VARCHAR(2000),
-    time_stamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    time_stamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP(0)
 );
 
 CREATE TABLE comment_likes (
