@@ -79,6 +79,7 @@ class Sql2oModelTest {
         Model model = new Sql2oModel(sql2o);
         model.createUser("Test Person 2", "person2@test.com", "password");
         assertEquals(model.getAllUsers().size(), 2);
+        assertThat(model.getAllUsers(), hasToString(new StringContains("Test Person 2")));
     }
 
     @Test
@@ -101,15 +102,9 @@ class Sql2oModelTest {
 
     @Test
     void getAllPosts() {
-      // Trying to get visibility for Post objects -- not really a test!!!
         Model model = new Sql2oModel(sql2o);
-        List<Post> posts = new ArrayList<Post>();
-        posts.add(new Post(postId1, userId, "some kind of message", "2020-02-07"));
-        System.out.println(posts);
-        System.out.println("-------------------");
-        System.out.println(model.getAllPosts());
-        System.out.println(model.getAllPosts().get(0).getClass());
-//        assertEquals(model.getAllPosts().get(0).getContent(), "example content");
+        model.getAllPosts();
+        assertThat(model.getAllPosts(), hasToString(new StringContains("example content")));
     }
 
     @Test
