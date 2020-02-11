@@ -7,6 +7,7 @@ import org.sql2o.quirks.PostgresQuirks;
 import spark.ModelAndView;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import static spark.Spark.*;
 import static spark.Spark.get;
@@ -87,6 +88,7 @@ public class Main {
             postsListings.put("users", model.getAllUsers());
             postsListings.put("name", name);
             postsListings.put("userId", userId);
+
             return new ModelAndView(postsListings, "templates/posts.vtl");
         }, new VelocityTemplateEngine());
 
@@ -95,6 +97,16 @@ public class Main {
             UUID userId = req.session().attribute("userId");
             String authorName = model.getNameByID(userId);
             model.createPost(content, userId, authorName);
+            res.redirect("/posts");
+            return null;
+        });
+
+        post("/comments/new", (req, res) -> {
+            String content = req.queryParams("comment");
+            UUID userId = req.session().attribute("userId");
+            UUID postId = model.getPostId(content);
+            String authorName = model.getCommentNameById(userId);
+            model.createComment(content, userId, postId, authorName);
             res.redirect("/posts");
             return null;
         });
