@@ -88,6 +88,7 @@ public class Main {
 //            }
             HashMap postsListings = new HashMap();
             postsListings.put("posts", model.getAllPosts());
+            postsListings.put("users", model.getAllUsers());
             postsListings.put("name", name);
             postsListings.put("userId", userId);
             return new ModelAndView(postsListings, "templates/posts.vtl");

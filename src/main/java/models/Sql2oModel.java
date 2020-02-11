@@ -68,6 +68,14 @@ public class Sql2oModel implements Model {
         }
     }
 
+    public String getNameByID(UUID user_id) {
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery("SELECT name FROM users WHERE user_id = '" + user_id + "'")
+                    .executeScalar(String.class);
+
+        }
+    }
+
     @Override
     public UUID getUserId(String email) {
         try (Connection conn = sql2o.open()) {

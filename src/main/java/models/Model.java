@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public interface Model {
     UUID createPost(String content, UUID userId);
-    List getAllPosts();
+    List  getAllPosts();
 
     UUID createUser(String name, String email, String password);
     List getAllUsers();
