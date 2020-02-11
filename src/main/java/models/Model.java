@@ -19,6 +19,10 @@ public interface Model {
     List getAllComments();
 
     List getCommentsByPostId(UUID postId);
+
+    UUID createLike(UUID userID, UUID postId);
+
+    List getPostLikes();
 }
 
 

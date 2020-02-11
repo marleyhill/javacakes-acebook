@@ -3,6 +3,15 @@
   <head>
     <title>Acebook!</title>
     <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
+    <style>
+        div.likes {
+        position: relative;
+        bottom: 50;
+        left: 410px;
+        width: 200px;
+        height: 10px;
+       }
+    </style>
   </head>
   <body>
 
@@ -17,18 +26,25 @@
 
     <form action='/posts/new' method="POST">
       <div class="form-group">
-        <input id="post" type="text" name="post">
+        <textarea id="post" type="text" name="post" style="width:400px; height:100px; border-style:double"></textarea>
       </div>
-      <button type="Submit" name="Submit" value="Submit" class="btn">Submit</button>
+      <button type="Submit" name="Submit" value="Submit" class="btn btn-primary">Submit</button>
     </form>
     <br><br>
-    <div class="posts-listings">
-    <ul>
-      #foreach($p in $posts)
-        <li>$p.content<br><br>Posted by $p.name $p.getTimeStamp()<br><br></li>
+    <ul style="list-style-type:none;">
+      <div class="each-post">
+        #foreach($p in $posts)
+        <li><textarea name="post-body" style="width:400px; height:100px; border-style:double">
+          $p.content</textarea>
+          <div class="likes">
+            <form action='/likes' method="POST"><input name=$p.getPostID() style="display:inline" type="submit" value="Like" class="btn btn-success"></form>
+            <p style="display:inline">$p.getPostID()</p>
+          </div>
+          Posted by $p.name $p.getTimeStamp()<br><br>
+        </li>
+      </div>
       #end
     </ul>
-    </div>
 
   </body>
 

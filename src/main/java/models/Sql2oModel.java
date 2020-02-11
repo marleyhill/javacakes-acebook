@@ -141,5 +141,28 @@ public class Sql2oModel implements Model {
             return comments;
         }
     }
+
+    @Override
+    public UUID createLike(UUID userID, UUID postID) {
+        try (Connection conn = sql2o.beginTransaction()) {
+            UUID postLikeID = UUID.randomUUID();
+            conn.createQuery("insert into post_likes(post_like_id, user_id, post_id) VALUES (:post_like_id, :user_id, :post_id)")
+                    .addParameter("post_like_id", postLikeID)
+                    .addParameter("user_id", userID)
+                    .addParameter("post_id", postID)
+                    .executeUpdate();
+            conn.commit();
+            return postLikeID;
+        }
+    }
+
+    @Override
+    public List<PostLikes> getPostLikes() {
+        try (Connection conn = sql2o.open()) {
+            List<PostLikes> likes = conn.createQuery("SELECT * FROM post_likes")
+                    .executeAndFetch(PostLikes.class);
+            return likes;
+        }
+    }
 }
 
