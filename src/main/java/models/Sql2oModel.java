@@ -51,9 +51,14 @@ public class Sql2oModel implements Model {
 
             if (authenticatedUser == null) {
                 return correctLoginDetails;
-            } else if (authenticatedUser.toString().contains(password)) {
-                correctLoginDetails = true;
+            } else {
+                String dbPassword = conn.createQuery("SELECT password FROM users WHERE email = '" + email + "'")
+                        .executeScalar(String.class);
+                if (password.equals(dbPassword)) {
+                    correctLoginDetails = true;
+                }
             }
+
         }
 
         return correctLoginDetails;
@@ -76,12 +81,21 @@ public class Sql2oModel implements Model {
         }
     }
 
+
     @Override
     public UUID getUserId(String email) {
         try (Connection conn = sql2o.open()) {
             return conn.createQuery("SELECT user_id FROM users WHERE email = '" + email + "'")
                     .executeScalar(UUID.class);
 
+        }
+    }
+
+    @Override
+    public UUID getPostId(String content) {
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery("SELECT post_id FROM users WHERE content = '" + content + "'")
+                    .executeScalar(UUID.class);
         }
     }
 
@@ -119,13 +133,14 @@ public class Sql2oModel implements Model {
     }
 
     @Override
-    public UUID createComment(String content, UUID userId, UUID postId) {
+    public UUID createComment(String content, UUID userId, UUID postId, String name) {
         try (Connection conn = sql2o.beginTransaction()) {
             UUID commentId = UUID.randomUUID();
-            conn.createQuery("INSERT INTO comments (comment_id, post_id, user_id, content) VALUES (:comment_id, :post_id, :user_id, :content)")
+            conn.createQuery("INSERT INTO comments (comment_id, post_id, user_id, name, content) VALUES (:comment_id, :post_id, :user_id, :name, :content)")
                     .addParameter("comment_id", commentId)
                     .addParameter("post_id", postId)
                     .addParameter("user_id", userId)
+                    .addParameter("name", name)
                     .addParameter("content", content)
                     .executeUpdate();
             conn.commit();
@@ -162,6 +177,15 @@ public class Sql2oModel implements Model {
             List<PostLikes> likes = conn.createQuery("SELECT * FROM post_likes")
                     .executeAndFetch(PostLikes.class);
             return likes;
+        }
+    }
+          
+    @Override
+    public String getCommentNameById(UUID user_id) {
+    try (Connection conn = sql2o.open()) {
+        return conn.createQuery("SELECT name FROM comments WHERE user_id = '" + user_id + "'")
+                .executeScalar(String.class);
+          
         }
     }
 }

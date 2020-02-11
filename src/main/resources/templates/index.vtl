@@ -25,7 +25,15 @@
     <br>
 
     <div class="signin">
-    <h2>Already a member? Log in here: </h2>
+
+
+    <h3>Already a member? Log in here: </h3>
+
+        #if ($loginError == true)
+
+            <p>Wrong email or password, please try again</p>
+        #end
+
 
      <form action="/session" method="POST">
        Email:<br>

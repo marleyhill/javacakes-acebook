@@ -31,7 +31,6 @@ class Sql2oModelTest {
     UUID postId = UUID.fromString("59921d6e-e210-4f68-ad7a-afac266278cb");
     UUID commentId = UUID.fromString("19921d6e-e210-4f68-ad7a-afac266278cb");
 
-
     @BeforeAll
     static void setUpClass() {
         BasicConfigurator.configure();
@@ -148,7 +147,7 @@ class Sql2oModelTest {
         conn.commit();
 
         Model model = new Sql2oModel(sql2o);
-        model.createComment("Second Comment", userId, postId);
+        model.createComment("Second Comment", userId, postId, "Test Person 1");
         assertThat(model.getAllComments(), hasToString(containsString("Second Comment")));
     }
   

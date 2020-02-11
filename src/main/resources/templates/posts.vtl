@@ -31,6 +31,7 @@
       <button type="Submit" name="Submit" value="Submit" class="btn btn-primary">Submit</button>
     </form>
     <br><br>
+    
     <ul style="list-style-type:none;">
       <div class="each-post">
         #foreach($p in $posts)
@@ -41,9 +42,13 @@
             <p style="display:inline">$p.getPostID()</p>
           </div>
           Posted by $p.name $p.getTimeStamp()<br><br>
+          <form action='/comments/new' method="POST">
+            <input id="comment" type="text" name="comment" placeholder="Add comment">
+            <input type="submit" value="Submit">
+        </from>
         </li>
+        #end
       </div>
-      #end
     </ul>
 
   </body>
