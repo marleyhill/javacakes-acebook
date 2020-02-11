@@ -40,6 +40,8 @@ public class Post {
 
     public UUID getUserID() {return this.user_id;}
 
+    public UUID getPostID() {return this.post_id;}
+
     public String getUserName() { return this.name;}
 
 

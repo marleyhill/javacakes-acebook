@@ -9,8 +9,8 @@ import spark.ModelAndView;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+
 import static spark.Spark.*;
-import static spark.Spark.get;
 
 public class Main {
 
@@ -136,5 +136,16 @@ public class Main {
             res.redirect("/");
             return null;
         });
+
+        post("/likes", (req, res) -> {
+            UUID userId = req.session().attribute("userId");
+            String idAsString = req.queryParams().toString();
+            System.out.println(req.queryParams().toString());
+            UUID postIdRetrieved = UUID.fromString(idAsString);
+            model.createLike(userId, postIdRetrieved);
+            res.redirect("/posts");
+            return null;
+        });
+
     }
 }

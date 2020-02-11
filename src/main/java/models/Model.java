@@ -22,7 +22,12 @@ public interface Model {
 
     List getCommentsByPostId(UUID postId);
 
+    UUID createLike(UUID userID, UUID postId);
+
+    List getPostLikes();
+  
     String getCommentNameById(UUID user_id);
+
 }
 
 
