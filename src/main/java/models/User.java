@@ -20,9 +20,6 @@ public class User {
         return this.name;
     }
 
-    public String getPassword() {
-        return this.password;
-    }
-
+    public UUID getID() {return this.user_id;}
 
 }

@@ -86,6 +86,7 @@ public class Main {
         });
 
         get("/posts", (req, res) -> {
+
             String name = req.session().attribute("name");
             UUID userId = req.session().attribute("userId");
             Boolean isSignedIn = req.session().attribute("isSignedIn");
@@ -113,7 +114,8 @@ public class Main {
         post("/posts/new", (req, res) -> {
             String content = req.queryParams("post");
             UUID userId = req.session().attribute("userId");
-            model.createPost(content, userId);
+            String authorName = model.getNameByID(userId);
+            model.createPost(content, userId, authorName);
             res.redirect("/posts");
             return null;
         });
