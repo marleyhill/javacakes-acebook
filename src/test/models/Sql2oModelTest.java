@@ -2,7 +2,6 @@ package models;
 
 import org.apache.log4j.BasicConfigurator;
 import org.flywaydb.core.Flyway;
-import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,19 +11,11 @@ import org.sql2o.Sql2o;
 import org.sql2o.converters.UUIDConverter;
 import org.sql2o.quirks.PostgresQuirks;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import java.sql.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class Sql2oModelTest {
@@ -117,7 +108,7 @@ class Sql2oModelTest {
         conn.commit();
 
         Model model = new Sql2oModel(sql2o);
-        model.createPost("Test Post", userId);
+        model.createPost("Test Post", userId, "test user");
         assertEquals(model.getAllPosts().size(), 3);
         assertThat(model.getAllPosts(), hasToString(containsString("Test Post")));
     }
@@ -174,6 +165,15 @@ class Sql2oModelTest {
         UUID userId = model.getUserId("person1@test.com");
         String userIdAsString = userId.toString();
         assertEquals(userIdAsString, "39921d6e-e210-4f68-ad7a-afac266278cb");
+
+    }
+
+    @Test
+    void getNameByID() {
+        Model model = new Sql2oModel(sql2o);
+        UUID userId = UUID.fromString("39921d6e-e210-4f68-ad7a-afac266278cb");
+        String name = model.getNameByID(userId);
+        assertEquals(name, "Test Person 1");
 
     }
 }

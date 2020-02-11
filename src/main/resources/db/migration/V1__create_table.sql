@@ -8,6 +8,7 @@ CREATE TABLE  users (
 CREATE TABLE posts (
     post_id VARCHAR UNIQUE,
     user_id VARCHAR REFERENCES users(user_id),
+    name VARCHAR (40),
     content VARCHAR(2000),
     time_stamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP(0)
 );

@@ -20,5 +20,5 @@ public class User {
         return this.name;
     }
 
-
+    public UUID getID() {return this.user_id;}
 }

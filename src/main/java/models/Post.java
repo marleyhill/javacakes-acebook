@@ -11,12 +11,14 @@ import java.util.UUID;
 public class Post {
     private UUID post_id;
     private UUID user_id;
+    private String name;
     private String content;
     private String time_stamp;
 
-    public Post(UUID post_id, UUID user_id, String content, String time_stamp) {
+    public Post(UUID post_id, UUID user_id, String name, String content, String time_stamp) {
         this.post_id = post_id;
         this.user_id = user_id;
+        this.name = name;
         this.content = content;
         this.time_stamp = time_stamp;
     }
@@ -26,6 +28,7 @@ public class Post {
         return "Post{" +
                 "post_id=" + post_id +
                 ", user_id=" + user_id +
+                ", name='" + name + '\'' +
                 ", content='" + content + '\'' +
                 ", time_stamp='" + time_stamp + '\'' +
                 '}';
@@ -37,17 +40,8 @@ public class Post {
 
     public UUID getUserID() {return this.user_id;}
 
-//    public String getDate() {
-//        SimpleDateFormat sdf = new SimpleDateFormat("dd/M/yyyy");
-//        String date = sdf.format(this.time_stamp);
-//        return date;
-//    }
-//
-//    public String getTime() {
-//        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
-//        String time = sdf.format(this.time_stamp);
-//        return time;
-//    }
+    public String getUserName() { return this.name;}
+
 
     public String getTimeStamp() throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
