@@ -57,6 +57,7 @@ public class Main {
             UUID userId = model.createUser(name, email, password);
             req.session().attribute("name", name);
             req.session().attribute("userId", userId);
+            req.session().attribute("isSignedIn", true);
 
             res.redirect("/posts");
 
@@ -124,6 +125,11 @@ public class Main {
             req.session().invalidate();
             res.redirect("/");
             return null;
+        });
+
+        internalServerError((req, res) -> {
+            res.type("application/json");
+            return "Email already exists, please try again";
         });
     }
 }

@@ -30,6 +30,7 @@ public class Sql2oModel implements Model {
             conn.commit();
             return userId;
         }
+
     }
 
     @Override
