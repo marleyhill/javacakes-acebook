@@ -7,7 +7,7 @@
   <body>
 
 
-    <h1>Welcome to acebook $name </h1>
+    <h1>Welcome to acebook, $name </h1>
 
     <form action="/session/destroy" method="POST">
       <input type="submit" value="Sign out">
@@ -25,7 +25,7 @@
     <div class="posts-listings">
     <ul>
       #foreach($p in $posts)
-        <li>$p.content<br><br>$p.getTimeStamp()<br><br></li>
+        <li>$p.content<br><br>Posted by $p.name $p.getTimeStamp()<br><br></li>
       #end
     </ul>
     </div>

@@ -72,10 +72,6 @@ public class Main {
         });
 
         get("/posts", (req, res) -> {
-            if(model.getAllPosts().size() == 0) {
-                UUID userId = UUID.fromString("49921d6e-e210-4f68-ad7a-afac266278cb");
-                UUID postId = model.createPost("test message body", userId);
-            }
 
             String name = req.session().attribute("name");
             UUID userId = req.session().attribute("userId");
@@ -88,6 +84,7 @@ public class Main {
 //            }
             HashMap postsListings = new HashMap();
             postsListings.put("posts", model.getAllPosts());
+            postsListings.put("users", model.getAllUsers());
             postsListings.put("name", name);
             postsListings.put("userId", userId);
             return new ModelAndView(postsListings, "templates/posts.vtl");
@@ -96,7 +93,8 @@ public class Main {
         post("/posts/new", (req, res) -> {
             String content = req.queryParams("post");
             UUID userId = req.session().attribute("userId");
-            model.createPost(content, userId);
+            String authorName = model.getNameByID(userId);
+            model.createPost(content, userId, authorName);
             res.redirect("/posts");
             return null;
         });

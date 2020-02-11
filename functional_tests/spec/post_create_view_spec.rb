@@ -1,13 +1,11 @@
 feature 'Creating and viewing a post' do
 
-    before(:all) do
+    before(:suite) do
         visit '/'
-        within(class: 'signup') do
-            fill_in "name", with: 'user'
-            fill_in "email", with: "email@me.com"
-            fill_in "password", with: "password123"
-            click_button 'Submit'
-        end
+        fill_in "name", with: 'user'
+        fill_in "email", with: "email@me.com"
+        fill_in "password", with: "password123"
+        click_button('Submit', match: :first)
     end
 
     scenario 'User can view post on posts page' do

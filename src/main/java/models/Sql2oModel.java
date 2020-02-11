@@ -67,6 +67,14 @@ public class Sql2oModel implements Model {
 
         }
     }
+    @Override
+    public String getNameByID(UUID user_id) {
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery("SELECT name FROM users WHERE user_id = '" + user_id + "'")
+                    .executeScalar(String.class);
+
+        }
+    }
 
     @Override
     public UUID getUserId(String email) {
@@ -78,12 +86,13 @@ public class Sql2oModel implements Model {
     }
 
     @Override
-    public UUID createPost(String content, UUID userId) {
+    public UUID createPost(String content, UUID userId, String name) {
         try (Connection conn = sql2o.beginTransaction()) {
             UUID postId = UUID.randomUUID();
-            conn.createQuery("INSERT INTO posts (post_id, user_id, content) VALUES (:post_id, :user_id, :content)")
+            conn.createQuery("INSERT INTO posts (post_id, user_id, name, content) VALUES (:post_id, :user_id, :name, :content)")
                     .addParameter("post_id", postId)
                     .addParameter("user_id", userId)
+                    .addParameter("name", name)
                     .addParameter("content", content)
                     .executeUpdate();
             conn.commit();
