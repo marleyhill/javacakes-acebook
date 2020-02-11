@@ -7,9 +7,10 @@ import org.sql2o.quirks.PostgresQuirks;
 import spark.ModelAndView;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
+
 import static spark.Spark.*;
-import static spark.Spark.get;
 
 public class Main {
 
@@ -121,6 +122,16 @@ public class Main {
             return null;
         });
 
+        post("/comments/new", (req, res) -> {
+            String content = req.queryParams("comment");
+            UUID userId = req.session().attribute("userId");
+            UUID postId = model.getPostId(content);
+            String authorName = model.getCommentNameById(userId);
+            model.createComment(content, userId, postId, authorName);
+            res.redirect("/posts");
+            return null;
+        });
+
         post("session/destroy", (req, res) -> {
             req.session().invalidate();
             res.redirect("/");
@@ -131,5 +142,16 @@ public class Main {
             res.type("application/json");
             return "Email already exists, please try again";
         });
+
+        post("/likes", (req, res) -> {
+            UUID userId = req.session().attribute("userId");
+            String idAsString = req.queryParams().toString();
+            System.out.println(req.queryParams().toString());
+            UUID postIdRetrieved = UUID.fromString(idAsString);
+            model.createLike(userId, postIdRetrieved);
+            res.redirect("/posts");
+            return null;
+        });
+
     }
 }

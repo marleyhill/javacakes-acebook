@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface Model {
+    UUID getPostId(String content);
+
     UUID createPost(String content, UUID userId, String name);
     List  getAllPosts();
 
@@ -15,10 +17,17 @@ public interface Model {
     String getNameByID(UUID user_id);
     UUID getUserId(String email);
 
-    UUID createComment(String content, UUID userId, UUID postId);
+    UUID createComment(String content, UUID userId, UUID postId, String name);
     List getAllComments();
 
     List getCommentsByPostId(UUID postId);
+
+    UUID createLike(UUID userID, UUID postId);
+
+    List getPostLikes();
+  
+    String getCommentNameById(UUID user_id);
+
 }
 
 

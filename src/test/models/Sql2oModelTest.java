@@ -29,9 +29,7 @@ class Sql2oModelTest {
     });
 
     UUID postId = UUID.fromString("59921d6e-e210-4f68-ad7a-afac266278cb");
-    UUID postId1 = UUID.fromString("69921d6e-e210-4f68-ad7a-afac266278cb");
     UUID commentId = UUID.fromString("19921d6e-e210-4f68-ad7a-afac266278cb");
-
 
     @BeforeAll
     static void setUpClass() {
@@ -55,12 +53,6 @@ class Sql2oModelTest {
                 .addParameter("post_id", postId)
                 .addParameter("user_id", userId)
                 .addParameter("content", "example content")
-                .executeUpdate();
-
-        conn.createQuery("INSERT INTO posts (post_id, user_id, content) VALUES (:post_id, :user_id, :content)")
-                .addParameter("post_id", postId1)
-                .addParameter("user_id", userId)
-                .addParameter("content", "example content 2")
                 .executeUpdate();
 
         conn.createQuery("INSERT INTO comments (comment_id, post_id, user_id, content) VALUES (:comment_id, :post_id, :user_id, :content)")
@@ -155,7 +147,7 @@ class Sql2oModelTest {
         conn.commit();
 
         Model model = new Sql2oModel(sql2o);
-        model.createComment("Second Comment", userId, postId);
+        model.createComment("Second Comment", userId, postId, "Test Person 1");
         assertThat(model.getAllComments(), hasToString(containsString("Second Comment")));
     }
   
@@ -183,4 +175,14 @@ class Sql2oModelTest {
         assertEquals(name, "Test Person 1");
 
     }
+
+    @Test
+    void createLike() {
+        Model model = new Sql2oModel(sql2o);
+        UUID testUserID = model.getUserId("person1@test.com");
+        model.createLike(testUserID, postId);
+        assertEquals(model.getPostLikes().size(), 1);
+        assertThat(model.getPostLikes(), hasToString(containsString("59921d6e-e210-4f68-ad7a-afac266278cb")));
+    }
+
 }
