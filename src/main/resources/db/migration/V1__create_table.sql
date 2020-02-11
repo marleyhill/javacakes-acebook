@@ -23,6 +23,7 @@ CREATE TABLE comments (
     comment_id VARCHAR UNIQUE,
     post_id VARCHAR REFERENCES posts(post_id),
     user_id VARCHAR REFERENCES users(user_id),
+    name VARCHAR(40),
     content VARCHAR(2000),
     time_stamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP(0)
 );

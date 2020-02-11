@@ -26,6 +26,10 @@
     <ul>
       #foreach($p in $posts)
         <li>$p.content<br><br>Posted by $p.name $p.getTimeStamp()<br><br></li>
+        <form action='/comments/new' method="POST">
+            <input id="comment" type="text" name="comment" placeholder="Add comment">
+            <input type="submit" value="Submit">
+        </from>
       #end
     </ul>
     </div>

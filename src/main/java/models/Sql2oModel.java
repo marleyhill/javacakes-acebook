@@ -92,6 +92,14 @@ public class Sql2oModel implements Model {
     }
 
     @Override
+    public UUID getPostId(String content) {
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery("SELECT post_id FROM users WHERE content = '" + content + "'")
+                    .executeScalar(UUID.class);
+        }
+    }
+
+    @Override
     public UUID createPost(String content, UUID userId, String name) {
         try (Connection conn = sql2o.beginTransaction()) {
             UUID postId = UUID.randomUUID();
@@ -125,13 +133,14 @@ public class Sql2oModel implements Model {
     }
 
     @Override
-    public UUID createComment(String content, UUID userId, UUID postId) {
+    public UUID createComment(String content, UUID userId, UUID postId, String name) {
         try (Connection conn = sql2o.beginTransaction()) {
             UUID commentId = UUID.randomUUID();
-            conn.createQuery("INSERT INTO comments (comment_id, post_id, user_id, content) VALUES (:comment_id, :post_id, :user_id, :content)")
+            conn.createQuery("INSERT INTO comments (comment_id, post_id, user_id, name, content) VALUES (:comment_id, :post_id, :user_id, :name, :content)")
                     .addParameter("comment_id", commentId)
                     .addParameter("post_id", postId)
                     .addParameter("user_id", userId)
+                    .addParameter("name", name)
                     .addParameter("content", content)
                     .executeUpdate();
             conn.commit();
@@ -145,6 +154,14 @@ public class Sql2oModel implements Model {
             List<Comment> comments = conn.createQuery("SELECT * FROM comments WHERE post_id = '" + postId + "' ORDER BY time_stamp DESC")
                     .executeAndFetch(Comment.class);
             return comments;
+        }
+    }
+
+    @Override
+    public String getCommentNameById(UUID user_id) {
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery("SELECT name FROM comments WHERE user_id = '" + user_id + "'")
+                    .executeScalar(String.class);
         }
     }
 }
