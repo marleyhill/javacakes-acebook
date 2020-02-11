@@ -51,9 +51,14 @@ public class Sql2oModel implements Model {
 
             if (authenticatedUser == null) {
                 return correctLoginDetails;
-            } else if (authenticatedUser.toString().contains(password)) {
-                correctLoginDetails = true;
+            } else {
+                String dbPassword = conn.createQuery("SELECT password FROM users WHERE email = '" + email + "'")
+                        .executeScalar(String.class);
+                if (password.equals(dbPassword)) {
+                    correctLoginDetails = true;
+                }
             }
+
         }
 
         return correctLoginDetails;
@@ -67,6 +72,7 @@ public class Sql2oModel implements Model {
 
         }
     }
+
 
     @Override
     public UUID getUserId(String email) {

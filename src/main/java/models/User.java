@@ -20,5 +20,9 @@ public class User {
         return this.name;
     }
 
+    public String getPassword() {
+        return this.password;
+    }
+
 
 }
