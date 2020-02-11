@@ -32,6 +32,7 @@
                     <mainClass>Main</mainClass>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 

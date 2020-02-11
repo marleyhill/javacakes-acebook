@@ -34,7 +34,20 @@ public class Main {
         Model model = new Sql2oModel(sql2o);
 
         get("/", (req, res) -> {
-            return new ModelAndView(new HashMap(), "templates/index.vtl");
+            Boolean loginError = false;
+
+            if ((req.session().attribute("loginError")) != null) {
+                loginError = true;
+            } else if ((req.session().attribute("isSignedIn")) != null) {
+                res.redirect("/posts");
+            }
+
+            HashMap index = new HashMap();
+
+            if (loginError == true) {
+                index.put("loginError", true);
+            }
+            return new ModelAndView(index, "templates/index.vtl");
         }, new VelocityTemplateEngine());
 
         post("/user/new", (req, res) -> {
@@ -66,6 +79,7 @@ public class Main {
                 req.session().attribute("userId", userId);
                 res.redirect("/posts");
             } else {
+                req.session().attribute("loginError", true);
                 res.redirect("/");
             }
 
@@ -77,20 +91,26 @@ public class Main {
             String name = req.session().attribute("name");
             UUID userId = req.session().attribute("userId");
             Boolean isSignedIn = req.session().attribute("isSignedIn");
-//
-//            if (isSignedIn == true) {
-//
-//            } else {
-//                res.redirect("/");
-//            }
-            HashMap postsListings = new HashMap();
-            postsListings.put("posts", model.getAllPosts());
-            postsListings.put("users", model.getAllUsers());
-            postsListings.put("name", name);
-            postsListings.put("userId", userId);
 
-            return new ModelAndView(postsListings, "templates/posts.vtl");
-        }, new VelocityTemplateEngine());
+            try {
+                if (isSignedIn == true) {
+                    HashMap postsListings = new HashMap();
+                    postsListings.put("posts", model.getAllPosts());
+                    postsListings.put("name", name);
+                    postsListings.put("userId", userId);
+                    return new VelocityTemplateEngine().render(
+                            new ModelAndView(postsListings, "templates/posts.vtl")
+                    );
+
+                }
+            } catch (Exception e) {
+
+                res.redirect("/");
+            }
+
+            return null;
+
+        });
 
         post("/posts/new", (req, res) -> {
             String content = req.queryParams("post");
