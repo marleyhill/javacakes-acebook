@@ -145,6 +145,13 @@ class Sql2oModelTest {
     }
 
     @Test
+    void getCommentsByPostId() {
+        Model model = new Sql2oModel(sql2o);
+        model.getCommentsByPostId(postId);
+        assertThat(model.getCommentsByPostId(postId), hasToString(containsString("59921d6e-e210-4f68-ad7a-afac266278cb")));
+    }
+
+    @Test
     void createComment() {
         Connection conn = sql2o.beginTransaction();
         UUID userId = UUID.fromString("49921d6e-e210-4f68-ad7a-afac266278cb");
