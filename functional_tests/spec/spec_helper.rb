@@ -17,6 +17,7 @@ require 'capybara'
 require 'capybara/rspec'
 require 'rspec'
 require_relative './test_db_setup'
+require 'orderly'
 
 require "selenium/webdriver"
 
@@ -48,10 +49,11 @@ Capybara.app_host = 'http://localhost:4567'
 RSpec.configure do |config|
 
     config.before(:suite) do
-       setup_test_database
+
        start_application
     end
     config.after(:suite) do
+       setup_test_database
        stop_application
     end
 
