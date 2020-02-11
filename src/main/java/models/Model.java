@@ -16,6 +16,8 @@ public interface Model {
 
     UUID createComment(String content, UUID userId, UUID postId);
     List getAllComments();
+
+    List getCommentsByPostId(UUID postId);
 }
 
 

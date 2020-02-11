@@ -123,5 +123,14 @@ public class Sql2oModel implements Model {
             return commentId;
         }
     }
+
+    @Override
+    public List<Comment> getCommentsByPostId(UUID postId) {
+        try(Connection conn = sql2o.open()) {
+            List<Comment> comments = conn.createQuery("SELECT * FROM comments WHERE post_id = '" + postId + "' ORDER BY time_stamp DESC")
+                    .executeAndFetch(Comment.class);
+            return comments;
+        }
+    }
 }
 
