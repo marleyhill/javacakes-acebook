@@ -99,12 +99,6 @@ public class Main {
                     postsListings.put("name", name);
                     postsListings.put("userId", userId);
 
-                    HashMap commentsListings = new HashMap();
-                    commentsListings.put("postId", model.getPostId(posts));
-                    commentsListings.put("comments", model.getCommentsByPostId(postId));
-                    commentsListings.put("name", name);
-                    commentsListings.put("userId", userId);
-
                     return new VelocityTemplateEngine().render(
                             new ModelAndView(postsListings, "templates/posts.vtl")
                     );
@@ -129,10 +123,11 @@ public class Main {
         });
 
         post("/comments/new", (req, res) -> {
+            String postIdAsString = req.queryParams("post-id-for-comment");
+            UUID postId = UUID.fromString(postIdAsString);
             String content = req.queryParams("comment");
             UUID userId = req.session().attribute("userId");
-            UUID postId = model.getPostId(content);
-            String authorName = model.getCommentNameById(userId);
+            String authorName = model.getNameByID(userId);
             model.createComment(content, userId, postId, authorName);
             res.redirect("/posts");
             return null;
