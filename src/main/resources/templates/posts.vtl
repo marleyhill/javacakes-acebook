@@ -2,68 +2,134 @@
 <html>
   <head>
     <title>Acebook!</title>
-    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
-        div.likes {
-        position: relative;
-        bottom: 50;
-        left: 410px;
-        width: 400px;
-        height: 10px;
-       }
+    html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
+
+     div.likes {
+            position: relative;
+            bottom: 50;
+            left: 410px;
+            width: 400px;
+            height: 10px;
+           }
+
+     div.h3 {
+        text-align: center;
+     }
     </style>
   </head>
-  <body>
 
+   <body class="w3-theme-l5">
 
-    <h1>Welcome to acebook, $name </h1>
+    <!-- Navbar -->
+    <div class="w3-top">
+        <div class="w3-bar w3-theme-d2 w3-left-align w3-large">
+            <div class="w3-bar-item w3-hide-small w3-padding-large">
+                <h3 style="font-weight:bold">Acebook </h3>
+            </div>
 
-    <form action="/session/destroy" method="POST">
-      <input type="submit" value="Sign out">
-      <br>
-    </form>
+            <div class="w3-bar-item w3-right w3-padding-large">
+                <form action="/session/destroy" method="POST">
+                <input type="submit" value="Sign out">
+                </form>
+            </div>
+        </div>
+    </div>
 
+    <!-- Page Container -->
+    <div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">
 
-    <form action='/posts/new' method="POST">
-      <div class="form-group">
-        <textarea id="post" type="text" name="post" style="width:400px; height:100px; border-style:double"></textarea>
-      </div>
-      <button type="Submit" name="Submit" value="Submit" class="btn btn-primary">Submit</button>
-    </form>
-    <br><br>
-    
-    <ul style="list-style-type:none;">
-        #foreach($p in $posts)
-        #set($allLikes = $modelMethods.getPostLikesByPostId($p.post_id))
-        <li><textarea name="post-body" style="width:400px; height:100px; border-style:double">
-          $p.content</textarea>
-          <div class="likes">
-            <form action='/likes' method="POST">
-              <button name="post-id-for-like" value="$p.getPostID()" type="submit" class="btn btn-success">Like</button>
-            </form>
-            <p style="position:relative; left:60px; bottom:25px">$allLikes likes</p>
+    <!-- The Grid -->
+     <div class="w3-row">
+
+     <!-- Left Column -->
+     <div class="w3-col m3">
+     </div>
+
+        <!-- Middle Column -->
+        <div class="w3-col m7">
+
+          <div class="w3-row-padding">
+            <div class="w3-col m12">
+              <div class="w3-card w3-round w3-white">
+                <div class="w3-container w3-padding">
+                    <h6 class="w3-opacity">Welcome to acebook, $name </h6>
+                    <form action='/posts/new' method="POST">
+                        <input contenteditable="true" id="post" name="post" class="w3-border w3-padding" style="width:95%"></input>
+                        <br>
+                        <button type="Submit" name="Submit" value="Submit" class="w3-button w3-theme"><i class="fa fa-pencil"></i>  Post</button>
+                    </form>
+                </div>
+              </div>
+            </div>
           </div>
-          Posted by $p.name $p.getTimeStamp()<br><br>
 
-          <form action='/comments/new' method="POST">
-            <input id="comment" type="text" name="comment" placeholder="Add comment">
-            <button name="post-id-for-comment" value="$p.getPostID()" type="submit" class="btn btn-success">Comment</button>
-          </form>
 
-          <ul>
-            #set($commentsByPostId = $modelMethods.getCommentsByPostId($p.post_id))
-            #foreach($comment in $commentsByPostId)
-            <li>
-                $comment.content
-                <br>
-                Posted by $comment.name $comment.getTimeStamp()
-            </li>
+          <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
+          <ul style="list-style-type:none;">
+          #foreach($p in $posts)
+                      #set($allLikes = $modelMethods.getPostLikesByPostId($p.post_id))
+            <img src="/w3images/avatar5.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+            <span class="w3-right w3-opacity">posted $p.getTimeStamp()</span>
+            <h4>$p.name</h4><br>
+            <hr class="w3-clear">
+            <p>$p.content</p>
+
+
+            <form action='/likes' method="POST">
+              <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom" name="post-id-for-like" value="$p.getPostID()" type="submit" class="btn btn-success"><i class="fa fa-thumbs-up"></i>  Like</button>
+            </form>
+
+            <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comment</button>
+            <p style="position:relative; left:60px; bottom:25px">$allLikes likes</p>
+           #end
+
+          </div>
+
+
+        <ul style="list-style-type:none;">
+            #foreach($p in $posts)
+            #set($allLikes = $modelMethods.getPostLikesByPostId($p.post_id))
+                <li><textarea name="post-body" style="width:400px; height:100px; border-style:double">
+                    $p.content</textarea>
+                    <div class="likes">
+                        <form action='/likes' method="POST">
+                            <button name="post-id-for-like" value="$p.getPostID()" type="submit" class="btn btn-success">Like</button>
+                        </form>
+                        <p style="position:relative; left:60px; bottom:25px">$allLikes likes</p>
+                    </div>
+
+                    Posted by $p.name $p.getTimeStamp()<br><br>
+
+                    <form action='/comments/new' method="POST">
+                        <input id="comment" type="text" name="comment" placeholder="Add comment">
+                        <button name="post-id-for-comment" value="$p.getPostID()" type="submit" class="btn btn-success">Comment</button>
+                    </form>
+
+                    <ul>
+                        #set($commentsByPostId = $modelMethods.getCommentsByPostId($p.post_id))
+                        #foreach($comment in $commentsByPostId)
+
+                        <li>
+                            $comment.content
+                            <br>
+                            Posted by $comment.name $comment.getTimeStamp()
+                        </li>
+                        #end
+                    </ul>
+                </li>
             #end
-          </ul>
-        </li>
-        #end
     </ul>
-
+    </div>
+    </div>
+    </div>
+    </div>
   </body>
 
 </html>

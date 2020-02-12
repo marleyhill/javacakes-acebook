@@ -114,6 +114,7 @@ public class Main {
 
         post("/posts/new", (req, res) -> {
             String content = req.queryParams("post");
+            System.out.println("content " + content);
             UUID userId = req.session().attribute("userId");
             String authorName = model.getNameByID(userId);
             model.createPost(content, userId, authorName);
