@@ -137,6 +137,11 @@ public class Main {
             return null;
         });
 
+        internalServerError((req, res) -> {
+            res.type("application/json");
+            return "Email already exists, please try again";
+        });
+
         post("/likes", (req, res) -> {
             UUID userId = req.session().attribute("userId");
             String idAsString = req.queryParams("post-id-for-like");
