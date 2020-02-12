@@ -34,6 +34,7 @@ public class Main {
 
         get("/", (req, res) -> {
             Boolean loginError = false;
+            Boolean deletePostError = false;
 
             if ((req.session().attribute("loginError")) != null) {
                 loginError = true;
@@ -58,8 +59,8 @@ public class Main {
             req.session().attribute("name", name);
             req.session().attribute("userId", userId);
             req.session().attribute("isSignedIn", true);
+            req.session().attribute("deletePostError", false);
             res.redirect("/posts");
-
             return null;
         });
 
@@ -75,6 +76,7 @@ public class Main {
 
                 req.session().attribute("name", name);
                 req.session().attribute("isSignedIn", true);
+                req.session().attribute("deletePostError", false);
                 req.session().attribute("userId", userId);
                 res.redirect("/posts");
             } else {
@@ -93,11 +95,18 @@ public class Main {
 
             try {
                 if (isSignedIn == true) {
+                    Boolean deletePostError = req.session().attribute("deletePostError");
+                    UUID deletePostId = req.session().attribute("deletePostId");
                     HashMap postsListings = new HashMap();
                     postsListings.put("posts", model.getAllPosts());
                     postsListings.put("modelMethods", model);
                     postsListings.put("name", name);
                     postsListings.put("userId", userId);
+                    if(deletePostError == true) {
+                        postsListings.put("deletePostError", true);
+                        postsListings.put("deletePostId", deletePostId);
+                    }
+                    req.session().attribute("deletePostError", false);
                     return new VelocityTemplateEngine().render(
                             new ModelAndView(postsListings, "templates/posts.vtl")
                     );
@@ -113,19 +122,31 @@ public class Main {
         });
 
         post("/posts/new", (req, res) -> {
-            String content = req.queryParams("post");
-            UUID userId = req.session().attribute("userId");
-            String authorName = model.getNameByID(userId);
-            model.createPost(content, userId, authorName);
-            res.redirect("/posts");
+            Boolean isSignedIn = req.session().attribute("isSignedIn");
+            if (isSignedIn == true) {
+                String content = req.queryParams("post");
+                UUID userId = req.session().attribute("userId");
+                String authorName = model.getNameByID(userId);
+                model.createPost(content, userId, authorName);
+                res.redirect("/posts");
+                }
             return null;
         });
 
         post("/posts/delete", (req, res) -> {
+            Boolean deletePostError = false;
+            UUID userId = req.session().attribute("userId");
             String idAsString = req.queryParams("post-id-delete");
             UUID deletePostId = UUID.fromString(idAsString);
             UUID postAuthorId = model.getPostAuthorId(deletePostId);
-            model.deletePostByUser(deletePostId, postAuthorId);
+            if(!userId.toString().equals(postAuthorId.toString())) {
+                deletePostError = true;
+                req.session().attribute("deletePostError", true);
+                req.session().attribute("deletePostId", deletePostId);
+            } else {
+                model.deletePostByUser(deletePostId, postAuthorId);
+                req.session().attribute("deletePostError", false);
+            }
             res.redirect("/posts");
             return null;
             });

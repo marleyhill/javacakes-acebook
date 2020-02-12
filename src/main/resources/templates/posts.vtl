@@ -35,7 +35,11 @@
     <ul style="list-style-type:none;">
         #foreach($p in $posts)
         #set($allLikes = $modelMethods.getPostLikesByPostId($p.post_id))
-        <li id="post-$p.post_id"><textarea name="post-body" style="width:400px; height:100px; border-style:double">
+        <li id="post-$p.post_id">
+            #if ($p.post_id == $deletePostId && $deletePostError == true)
+            <br> <p><b>You can only delete your own posts!</b></p>
+            #end
+            <textarea name="post-body" style="width:400px; height:100px; border-style:double">
           $p.content</textarea>
           <div class="likes">
             <form action='/likes' method="POST">
