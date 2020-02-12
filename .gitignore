@@ -96,7 +96,7 @@ modules.xml
 
 # Log files
 *.log.**
-
+*.log.*
 
 #Target Files
 target/**
