@@ -114,6 +114,22 @@ class Sql2oModelTest {
     }
 
     @Test
+    void deletePostByUser() {
+        Model model = new Sql2oModel(sql2o);
+        UUID userId = UUID.fromString("39921d6e-e210-4f68-ad7a-afac266278cb");
+        model.deletePostByUser(postId, userId);
+        assertEquals(model.getAllPosts().size(), 0);
+    }
+
+//    @Test
+//    void deletesPostByAuthorOnly() {
+//        Model model = new Sql2oModel(sql2o);
+//        UUID newUserId = UUID.fromString("59921d6e-e210-4f68-ad7a-afac266278cb");
+//        model.deletePostByUser(postId, newUserId);
+//        assertThrows();
+//    }
+
+    @Test
     void getAllPostsHaveTimestamps() {
         Model model = new Sql2oModel(sql2o);
         model.getAllPosts();

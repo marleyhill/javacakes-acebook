@@ -98,7 +98,6 @@ public class Main {
                     postsListings.put("modelMethods", model);
                     postsListings.put("name", name);
                     postsListings.put("userId", userId);
-
                     return new VelocityTemplateEngine().render(
                             new ModelAndView(postsListings, "templates/posts.vtl")
                     );

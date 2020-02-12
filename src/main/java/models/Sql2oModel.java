@@ -127,6 +127,15 @@ public class Sql2oModel implements Model {
     }
 
     @Override
+    public void deletePostByUser(UUID postId, UUID userId) {
+        try (Connection conn = sql2o.beginTransaction()) {
+            conn.createQuery("DELETE FROM posts WHERE post_id = '"+ postId + "'")
+            .executeUpdate();
+            conn.commit();
+        }
+    }
+
+    @Override
     public List<Comment> getAllComments() {
         try (Connection conn = sql2o.open()) {
             List<Comment> comments = conn.createQuery("SELECT * FROM comments")

@@ -16,12 +16,12 @@ CREATE TABLE posts (
 CREATE TABLE post_likes (
     post_like_id VARCHAR UNIQUE,
     user_id VARCHAR REFERENCES users(user_id),
-    post_id VARCHAR REFERENCES posts(post_id)
+    post_id VARCHAR REFERENCES posts(post_id) ON DELETE CASCADE
 );
 
 CREATE TABLE comments (
     comment_id VARCHAR UNIQUE,
-    post_id VARCHAR REFERENCES posts(post_id),
+    post_id VARCHAR REFERENCES posts(post_id) ON DELETE CASCADE,
     user_id VARCHAR REFERENCES users(user_id),
     name VARCHAR(40),
     content VARCHAR(2000),
@@ -31,5 +31,5 @@ CREATE TABLE comments (
 CREATE TABLE comment_likes (
     comment_like_id VARCHAR UNIQUE,
     user_id VARCHAR REFERENCES users(user_id),
-    comment_id VARCHAR REFERENCES comments(comment_id)
+    comment_id VARCHAR REFERENCES comments(comment_id) ON DELETE CASCADE
 );
