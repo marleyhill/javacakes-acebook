@@ -123,11 +123,11 @@ public class Main {
 
         post("/posts/new", (req, res) -> {
 
-            String content = req.queryParams("post");
+            String content;
 
             Boolean isSignedIn = req.session().attribute("isSignedIn");
             if (isSignedIn == true) {
-                String content = req.queryParams("post");
+                content = req.queryParams("post");
                 UUID userId = req.session().attribute("userId");
                 String authorName = model.getNameByID(userId);
                 model.createPost(content, userId, authorName);
