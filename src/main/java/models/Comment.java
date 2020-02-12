@@ -2,6 +2,10 @@ package models;
 
 import lombok.Data;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 import java.util.UUID;
 
 @Data
@@ -20,5 +24,16 @@ public class Comment {
         this.content = content;
         this.user_id = user_id;
         this.time_stamp = time_stamp;
+    }
+
+    public String getTimeStamp() throws ParseException {
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = sdf.parse(this.time_stamp);
+        SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm:ss");
+        String dateStr = sdfDate.format(date);
+        String timeStr = sdfTime.format(date);
+        return "on: " + dateStr + " at: " + timeStr;
     }
 }

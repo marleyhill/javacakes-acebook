@@ -3,6 +3,7 @@ package models;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
+import java.sql.SQLOutput;
 import java.util.List;
 import java.util.UUID;
 
@@ -95,8 +96,9 @@ public class Sql2oModel implements Model {
     @Override
     public UUID getPostId(String content) {
         try (Connection conn = sql2o.open()) {
-            return conn.createQuery("SELECT post_id FROM users WHERE content = '" + content + "'")
+            UUID id = conn.createQuery("SELECT post_id FROM posts WHERE content = '" + content + "'")
                     .executeScalar(UUID.class);
+            return id;
         }
     }
 
@@ -152,7 +154,7 @@ public class Sql2oModel implements Model {
     @Override
     public List<Comment> getCommentsByPostId(UUID postId) {
         try(Connection conn = sql2o.open()) {
-            List<Comment> comments = conn.createQuery("SELECT * FROM comments WHERE post_id = '" + postId + "' ORDER BY time_stamp DESC")
+            List<Comment> comments = conn.createQuery("SELECT * FROM comments WHERE post_id = '" + postId + "'")
                     .executeAndFetch(Comment.class);
             return comments;
         }

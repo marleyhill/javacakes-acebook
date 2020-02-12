@@ -44,12 +44,22 @@
             <p style="position:relative; left:60px; bottom:25px">$allLikes likes</p>
           </div>
           Posted by $p.name $p.getTimeStamp()<br><br>
-            <ul>
-              <li><form action='/comments/new' method="POST">
-                <input id="comment" type="text" name="comment" placeholder="Add comment">
-                <input type="submit" value="Submit">
-                </form> <br><br></li>
-            </ul>
+
+          <form action='/comments/new' method="POST">
+            <input id="comment" type="text" name="comment" placeholder="Add comment">
+            <button name="post-id-for-comment" value="$p.getPostID()" type="submit" class="btn btn-success">Comment</button>
+          </form>
+
+          <ul>
+            #set($commentsByPostId = $modelMethods.getCommentsByPostId($p.post_id))
+            #foreach($comment in $commentsByPostId)
+            <li>
+                $comment.content
+                <br>
+                Posted by $comment.name $comment.getTimeStamp()
+            </li>
+            #end
+          </ul>
         </li>
         #end
     </ul>
