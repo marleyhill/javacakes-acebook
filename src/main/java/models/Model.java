@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public interface Model {
     UUID getPostId(String content);
-
+    UUID getPostAuthorId(UUID postId);
     UUID createPost(String content, UUID userId, String name);
     List  getAllPosts();
     void deletePostByUser(UUID postId, UUID userId);
@@ -18,6 +18,10 @@ public interface Model {
     String getNameByID(UUID user_id);
     UUID getUserId(String email);
 
+    void deleteCommentByUser(UUID commentId, UUID userId);
+
+    UUID getCommentAuthorId(UUID commentId);
+
     UUID createComment(String content, UUID userId, UUID postId, String name);
     List getAllComments();
 
@@ -26,9 +30,14 @@ public interface Model {
     UUID createLike(UUID userID, UUID postId);
 
     int getPostLikesByPostId(UUID postId);
-  
+
+    UUID createCommentLike(UUID userId, UUID commentId);
+
+    int getCommentLikesByCommentId(UUID commentId);
+
     String getCommentNameById(UUID user_id);
 
+    UUID getCommentId(String content);
 }
 
 
