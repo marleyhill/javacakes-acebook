@@ -7,7 +7,6 @@ import org.sql2o.quirks.PostgresQuirks;
 import spark.ModelAndView;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 import static spark.Spark.*;
@@ -58,7 +57,7 @@ public class Main {
             UUID userId = model.createUser(name, email, password);
             req.session().attribute("name", name);
             req.session().attribute("userId", userId);
-
+            req.session().attribute("isSignedIn", true);
             res.redirect("/posts");
 
             return null;
@@ -96,6 +95,7 @@ public class Main {
                 if (isSignedIn == true) {
                     HashMap postsListings = new HashMap();
                     postsListings.put("posts", model.getAllPosts());
+                    postsListings.put("modelMethods", model);
                     postsListings.put("name", name);
                     postsListings.put("userId", userId);
                     return new VelocityTemplateEngine().render(
@@ -139,8 +139,7 @@ public class Main {
 
         post("/likes", (req, res) -> {
             UUID userId = req.session().attribute("userId");
-            String idAsString = req.queryParams().toString();
-            System.out.println(req.queryParams().toString());
+            String idAsString = req.queryParams("post-id-for-like");
             UUID postIdRetrieved = UUID.fromString(idAsString);
             model.createLike(userId, postIdRetrieved);
             res.redirect("/posts");

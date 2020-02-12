@@ -5,6 +5,7 @@ import lombok.Data;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.UUID;
 
 @Data
@@ -46,12 +47,14 @@ public class Post {
 
 
     public String getTimeStamp() throws ParseException {
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = sdf.parse(this.time_stamp);
         SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
-        SimpleDateFormat sdfTime = new SimpleDateFormat("hh:mm:ss Z");
+        SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm:ss Z");
         String dateStr = sdfDate.format(date);
         String timeStr = sdfTime.format(date);
+        System.out.println(timeStr);
         return "on: " + dateStr + " at: " + timeStr;
     }
 

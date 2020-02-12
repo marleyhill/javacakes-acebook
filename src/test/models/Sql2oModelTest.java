@@ -181,8 +181,15 @@ class Sql2oModelTest {
         Model model = new Sql2oModel(sql2o);
         UUID testUserID = model.getUserId("person1@test.com");
         model.createLike(testUserID, postId);
-        assertEquals(model.getPostLikes().size(), 1);
-        assertThat(model.getPostLikes(), hasToString(containsString("59921d6e-e210-4f68-ad7a-afac266278cb")));
+        assertEquals(model.getPostLikesByPostId(postId), 1);
     }
 
+    @Test
+    void getPostLikesByPostId() {
+        Model model = new Sql2oModel(sql2o);
+        UUID testUserID = model.getUserId("person1@test.com");
+        model.createLike(testUserID, postId);
+        model.createLike(testUserID, postId);
+        assertEquals(model.getPostLikesByPostId(postId), 2);
+    }
 }
