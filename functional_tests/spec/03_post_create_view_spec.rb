@@ -9,7 +9,7 @@ feature 'Creating and viewing a post' do
 
         visit('/posts')
         fill_in :post, with: 'This is the first test post'
-        click_button 'Submit'
+        click_button('Post')
         expect(page).to have_content 'This is the first test post'
     end
 
@@ -21,7 +21,7 @@ feature 'Creating and viewing a post' do
        click_button('Log in')
        visit '/posts'
        fill_in :post, with: "This is another test post"
-       click_button "Submit"
+       click_button("Post")
        expect(page).to have_content "This is another test post"
     end
 end
