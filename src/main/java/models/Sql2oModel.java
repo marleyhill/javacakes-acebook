@@ -3,7 +3,6 @@ package models;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
-import java.sql.SQLOutput;
 import java.util.List;
 import java.util.UUID;
 
@@ -132,6 +131,14 @@ public class Sql2oModel implements Model {
             conn.createQuery("DELETE FROM posts WHERE post_id = '"+ postId + "'")
             .executeUpdate();
             conn.commit();
+        }
+    }
+
+    @Override
+    public UUID getPostAuthorId(UUID postId) {
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery("SELECT user_id FROM posts WHERE post_id = '" + postId + "'")
+                    .executeScalar(UUID.class);
         }
     }
 

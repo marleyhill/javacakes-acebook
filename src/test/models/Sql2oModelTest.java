@@ -114,6 +114,13 @@ class Sql2oModelTest {
     }
 
     @Test
+    void getPostAuthorId() {
+        Model model = new Sql2oModel(sql2o);
+        UUID userId = UUID.fromString("39921d6e-e210-4f68-ad7a-afac266278cb");
+        assertEquals(model.getPostAuthorId(postId), userId);
+    }
+
+    @Test
     void deletePostByUser() {
         Model model = new Sql2oModel(sql2o);
         UUID userId = UUID.fromString("39921d6e-e210-4f68-ad7a-afac266278cb");

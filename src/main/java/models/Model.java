@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public interface Model {
     UUID getPostId(String content);
-
+    UUID getPostAuthorId(UUID postId);
     UUID createPost(String content, UUID userId, String name);
     List  getAllPosts();
     void deletePostByUser(UUID postId, UUID userId);
