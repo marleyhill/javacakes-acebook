@@ -239,13 +239,13 @@ public class Sql2oModel implements Model {
             return likes.size();
         }
     }
-          
+
     @Override
     public String getCommentNameById(UUID user_id) {
     try (Connection conn = sql2o.open()) {
         return conn.createQuery("SELECT name FROM comments WHERE user_id = '" + user_id + "'")
                 .executeScalar(String.class);
-          
+
         }
     }
 
