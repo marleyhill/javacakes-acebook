@@ -38,7 +38,7 @@
         <li id="post-$p.post_id"><textarea name="post-body" style="width:400px; height:100px; border-style:double">
           $p.content</textarea>
           <div class="likes">
-            <form action='/likes' method="POST">
+            <form action='/posts/likes' method="POST">
               <button name="post-id-for-like" value="$p.getPostID()" type="submit" class="btn btn-success">Like</button>
             </form>
             <p style="position:relative; left:60px; bottom:25px">$allLikes likes</p>
@@ -53,10 +53,16 @@
           <ul>
             #set($commentsByPostId = $modelMethods.getCommentsByPostId($p.post_id))
             #foreach($comment in $commentsByPostId)
+            #set($allCommentLikes = $modelMethods.getCommentLikesByCommentId($comment.comment_id))
             <li>
-                $comment.content
-                <br>
-                Posted by $comment.name $comment.getTimeStamp()
+               $comment.content
+               <div class="likes">
+                 <form action='/comments/likes' method="POST">
+                    <button name="comment-id-for-like" value="$comment.getCommentId()" type="submit" class="btn btn-success">Like</button>
+                 </form>
+                 <p style="position:relative; left:60px; bottom:25px">$allCommentLikes likes</p>
+               </div>
+               Posted by $comment.name $comment.getTimeStamp()
             </li>
             #end
           </ul>

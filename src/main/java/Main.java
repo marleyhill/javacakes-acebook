@@ -152,7 +152,7 @@ public class Main {
             return "Email already exists, please try again";
         });
 
-        post("/likes", (req, res) -> {
+        post("/posts/likes", (req, res) -> {
             UUID userId = req.session().attribute("userId");
             String idAsString = req.queryParams("post-id-for-like");
             UUID postIdRetrieved = UUID.fromString(idAsString);
@@ -161,5 +161,13 @@ public class Main {
             return null;
         });
 
+        post("/comments/likes", (req, res) -> {
+            UUID userId = req.session().attribute("userId");
+            String commentIdAsString = req.queryParams("comment-id-for-like");
+            UUID commentId = UUID.fromString(commentIdAsString);
+            model.createCommentLike(userId, commentId);
+            res.redirect("/posts");
+            return null;
+        });
     }
 }

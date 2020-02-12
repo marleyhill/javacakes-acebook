@@ -26,6 +26,8 @@ public class Comment {
         this.time_stamp = time_stamp;
     }
 
+    public UUID getCommentId() {return this.comment_id;}
+
     public String getTimeStamp() throws ParseException {
         TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

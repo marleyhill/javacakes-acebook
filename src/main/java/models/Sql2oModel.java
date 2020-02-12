@@ -199,6 +199,29 @@ public class Sql2oModel implements Model {
             return likes.size();
         }
     }
+
+    @Override
+    public UUID createCommentLike(UUID userId, UUID commentId) {
+        try (Connection conn = sql2o.beginTransaction()) {
+            UUID commentLikeId = UUID.randomUUID();
+            conn.createQuery("INSERT INTO comment_likes (comment_like_id, user_id, comment_id) VALUES (:comment_like_id, :user_id, :comment_id)")
+                    .addParameter("comment_like_id", commentLikeId)
+                    .addParameter("user_id", userId)
+                    .addParameter("comment_id", commentId)
+                    .executeUpdate();
+            conn.commit();
+            return commentLikeId;
+        }
+    }
+
+    @Override
+    public int getCommentLikesByCommentId(UUID commentId) {
+        try (Connection conn = sql2o.open()) {
+            List<CommentLikes> likes = conn.createQuery("SELECT * FROM comment_likes WHERE comment_id = '" + commentId + "'")
+                    .executeAndFetch(CommentLikes.class);
+            return likes.size();
+        }
+    }
           
     @Override
     public String getCommentNameById(UUID user_id) {
@@ -206,6 +229,15 @@ public class Sql2oModel implements Model {
         return conn.createQuery("SELECT name FROM comments WHERE user_id = '" + user_id + "'")
                 .executeScalar(String.class);
           
+        }
+    }
+
+    @Override
+    public UUID getCommentId(String content) {
+        try (Connection conn = sql2o.open()) {
+            UUID id = conn.createQuery("SELECT comment_id FROM comments WHERE content = '" + content + "'")
+                    .executeScalar(UUID.class);
+            return id;
         }
     }
 }
