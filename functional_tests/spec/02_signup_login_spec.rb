@@ -1,6 +1,6 @@
 feature 'user can sign up' do
 
-    scenario 'User can view post on posts page' do
+    scenario 'User can sign up' do
 
         visit '/'
         fill_in "name", with: "My name"
@@ -28,5 +28,15 @@ feature 'user can sign up' do
         click_button('Sign out')
         expect(page).not_to have_content 'Welcome to acebook, My name'
    end
+
+   scenario 'User can only sign up once' do
+        visit '/'
+        fill_in "name", with: "My name"
+        fill_in "email", with: "email@me.com"
+        fill_in "password", with: "password123"
+        click_button('Sign up')
+        expect(page).to have_content 'Email already exists, please try again'
+
+    end
 
 end
