@@ -141,6 +141,15 @@ public class Main {
             return null;
         });
 
+        post("/comments/delete", (req, res) -> {
+            String commentIdAsString = req.queryParams("comment-id-delete");
+            UUID deleteCommentId = UUID.fromString(commentIdAsString);
+            UUID commentAuthorId = model.getCommentAuthorId(deleteCommentId);
+            model.deleteCommentByUser(deleteCommentId, commentAuthorId);
+            res.redirect("/posts");
+            return null;
+        });
+
         post("session/destroy", (req, res) -> {
             req.session().invalidate();
             res.redirect("/");

@@ -18,6 +18,10 @@ public interface Model {
     String getNameByID(UUID user_id);
     UUID getUserId(String email);
 
+    void deleteCommentByUser(UUID commentId, UUID userId);
+
+    UUID getCommentAuthorId(UUID commentId);
+
     UUID createComment(String content, UUID userId, UUID postId, String name);
     List getAllComments();
 

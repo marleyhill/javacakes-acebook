@@ -47,7 +47,7 @@
 
           <form action='/comments/new' method="POST">
             <input id="comment" type="text" name="comment" placeholder="Add comment">
-            <button name="post-id-for-comment" value="$p.getPostID()" type="submit" class="btn btn-success">Comment</button>
+            <button name="post-id-for-comment" value="$p.getPostID()" type="submit" class="btn btn-primary">Comment</button>
           </form>
 
           <ul>
@@ -64,6 +64,10 @@
                </div>
                Posted by $comment.name $comment.getTimeStamp()
             </li>
+            <form action="/comments/delete" method="POST">
+                <input type='hidden' name='method' value='DELETE'>
+                <button name="comment-id-delete" value="$comment.comment_id" type="submit" class="btn btn-danger">Delete comment</button>
+            </form>
             #end
           </ul>
          <br> <form action="/posts/delete" method="post">
