@@ -98,6 +98,13 @@ public class Main {
                     postsListings.put("posts", model.getAllPosts());
                     postsListings.put("name", name);
                     postsListings.put("userId", userId);
+
+                    HashMap commentsListings = new HashMap();
+                    commentsListings.put("postId", model.getPostId(posts));
+                    commentsListings.put("comments", model.getCommentsByPostId(postId));
+                    commentsListings.put("name", name);
+                    commentsListings.put("userId", userId);
+
                     return new VelocityTemplateEngine().render(
                             new ModelAndView(postsListings, "templates/posts.vtl")
                     );
