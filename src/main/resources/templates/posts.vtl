@@ -35,7 +35,7 @@
     <ul style="list-style-type:none;">
         #foreach($p in $posts)
         #set($allLikes = $modelMethods.getPostLikesByPostId($p.post_id))
-        <li><textarea name="post-body" style="width:400px; height:100px; border-style:double">
+        <li id="post-$p.post_id"><textarea name="post-body" style="width:400px; height:100px; border-style:double">
           $p.content</textarea>
           <div class="likes">
             <form action='/likes' method="POST">
@@ -60,6 +60,10 @@
             </li>
             #end
           </ul>
+         <br> <form action="/posts/delete" method="post">
+            <input type='hidden' name='method' value='DELETE'>
+            <button name="post-id-delete" value="$p.post_id" type="submit" class="btn btn-danger">Delete post</button>
+          </form><br>
         </li>
         #end
     </ul>

@@ -121,6 +121,15 @@ public class Main {
             return null;
         });
 
+        post("/posts/delete", (req, res) -> {
+            String idAsString = req.queryParams("post-id-delete");
+            UUID deletePostId = UUID.fromString(idAsString);
+            UUID postAuthorId = model.getPostAuthorId(deletePostId);
+            model.deletePostByUser(deletePostId, postAuthorId);
+            res.redirect("/posts");
+            return null;
+            });
+
         post("/comments/new", (req, res) -> {
             String postIdAsString = req.queryParams("post-id-for-comment");
             UUID postId = UUID.fromString(postIdAsString);
