@@ -152,6 +152,23 @@ public class Sql2oModel implements Model {
     }
 
     @Override
+    public void deleteCommentByUser(UUID commentId, UUID userId) {
+        try (Connection conn = sql2o.beginTransaction()) {
+            conn.createQuery("DELETE FROM comments WHERE comment_id = '"+ commentId + "'")
+                    .executeUpdate();
+            conn.commit();
+        }
+    }
+
+    @Override
+    public UUID getCommentAuthorId(UUID commentId) {
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery("SELECT user_id FROM comments WHERE comment_id = '" + commentId + "'")
+                    .executeScalar(UUID.class);
+        }
+    }
+
+    @Override
     public UUID createComment(String content, UUID userId, UUID postId, String name) {
         try (Connection conn = sql2o.beginTransaction()) {
             UUID commentId = UUID.randomUUID();
