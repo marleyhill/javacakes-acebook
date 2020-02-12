@@ -100,8 +100,6 @@ public class Main {
                     postsListings.put("userId", userId);
 
                     HashMap commentsListings = new HashMap();
-                    commentsListings.put("postId", model.getPostId(posts));
-                    commentsListings.put("comments", model.getCommentsByPostId(postId));
                     commentsListings.put("name", name);
                     commentsListings.put("userId", userId);
 
