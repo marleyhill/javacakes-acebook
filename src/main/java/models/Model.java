@@ -24,7 +24,7 @@ public interface Model {
 
     UUID createLike(UUID userID, UUID postId);
 
-    List getPostLikes();
+    int getPostLikesByPostId(UUID postId);
   
     String getCommentNameById(UUID user_id);
 

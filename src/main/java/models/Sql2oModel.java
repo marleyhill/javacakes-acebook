@@ -173,11 +173,12 @@ public class Sql2oModel implements Model {
     }
 
     @Override
-    public List<PostLikes> getPostLikes() {
+    public int getPostLikesByPostId(UUID postId) {
         try (Connection conn = sql2o.open()) {
-            List<PostLikes> likes = conn.createQuery("SELECT * FROM post_likes")
+            List<PostLikes> likes = conn.createQuery("SELECT * FROM post_likes WHERE post_id = '" + postId + "'")
                     .executeAndFetch(PostLikes.class);
-            return likes;
+//            int likesNumber = likes.size();
+            return likes.size();
         }
     }
           
