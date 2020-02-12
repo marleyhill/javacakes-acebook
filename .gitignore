@@ -95,8 +95,8 @@ modules.xml
 *.txt
 
 # Log files
-*.log.**
-*.log.*
+*.log
+*.log.1
 
 #Target Files
 target/**
