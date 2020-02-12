@@ -122,6 +122,9 @@ public class Main {
         });
 
         post("/posts/new", (req, res) -> {
+
+            String content = req.queryParams("post");
+
             Boolean isSignedIn = req.session().attribute("isSignedIn");
             if (isSignedIn == true) {
                 String content = req.queryParams("post");

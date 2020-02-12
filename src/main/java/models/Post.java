@@ -54,7 +54,7 @@ public class Post {
         SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm:ss");
         String dateStr = sdfDate.format(date);
         String timeStr = sdfTime.format(date);
-        return "on: " + dateStr + " at: " + timeStr;
+        return "on " + dateStr + " at " + timeStr;
     }
 
 }
