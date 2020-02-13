@@ -28,6 +28,7 @@ public interface Model {
     List getCommentsByPostId(UUID postId);
 
     UUID createLike(UUID userID, UUID postId);
+    Boolean isLikeExisting(UUID userID, UUID postID);
 
     int getPostLikesByPostId(UUID postId);
 

@@ -194,7 +194,17 @@ public class Sql2oModel implements Model {
     }
 
     @Override
+    public Boolean isLikeExisting(UUID userID, UUID postID){
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery("select exists(select 1 from post_likes where post_id = '" + postID + "' and user_id = '" + userID + "')")
+                    .executeScalar(Boolean.class);
+        }
+    }
+
+    @Override
     public UUID createLike(UUID userID, UUID postID) {
+        Boolean isExisting = isLikeExisting(userID, postID);
+        if(isExisting == false) {
         try (Connection conn = sql2o.beginTransaction()) {
             UUID postLikeID = UUID.randomUUID();
             conn.createQuery("insert into post_likes(post_like_id, user_id, post_id) VALUES (:post_like_id, :user_id, :post_id)")
@@ -204,6 +214,9 @@ public class Sql2oModel implements Model {
                     .executeUpdate();
             conn.commit();
             return postLikeID;
+            }
+        } else {
+            return null;
         }
     }
 

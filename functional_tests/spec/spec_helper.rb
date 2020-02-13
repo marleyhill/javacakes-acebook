@@ -49,7 +49,6 @@ Capybara.app_host = 'http://localhost:4567'
 RSpec.configure do |config|
 
     config.before(:suite) do
-
        start_application
     end
     config.after(:suite) do
