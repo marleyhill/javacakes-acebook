@@ -123,11 +123,11 @@ public class Main {
 
         post("/posts/new", (req, res) -> {
 
-            String content = req.queryParams("post");
+            String content;
 
             Boolean isSignedIn = req.session().attribute("isSignedIn");
             if (isSignedIn == true) {
-                String content = req.queryParams("post");
+                content = req.queryParams("post");
                 UUID userId = req.session().attribute("userId");
                 String authorName = model.getNameByID(userId);
                 model.createPost(content, userId, authorName);
@@ -187,9 +187,12 @@ public class Main {
 
         post("/posts/likes", (req, res) -> {
             UUID userId = req.session().attribute("userId");
+            System.out.println("userID: " + userId);
             String idAsString = req.queryParams("post-id-for-like");
+            System.out.println("post id for like: " + idAsString);
             UUID postIdRetrieved = UUID.fromString(idAsString);
-            model.createLike(userId, postIdRetrieved);
+            System.out.println("post id retrieved: " + postIdRetrieved);
+            System.out.println(model.createLike(userId, postIdRetrieved));
             res.redirect("/posts");
             return null;
         });
