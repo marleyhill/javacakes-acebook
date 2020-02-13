@@ -14,8 +14,11 @@ import static spark.Spark.*;
 public class Main {
 
     public static void main(String[] args) {
+        port(getHerokuAssignedPort());
+
         staticFileLocation("/public");
         String dbName = "acebook";
+
         for(String a:args) {
             dbName = a;
         }
@@ -199,5 +202,13 @@ public class Main {
             res.redirect("/posts");
             return null;
         });
+    }
+
+    static int getHerokuAssignedPort() {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        if (processBuilder.environment().get("PORT") != null) {
+            return Integer.parseInt(processBuilder.environment().get("PORT"));
+        }
+        return 4567; //return default port if heroku-port isn't set (i.e. on localhost)
     }
 }
