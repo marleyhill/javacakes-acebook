@@ -152,22 +152,32 @@ public class Main {
             });
 
         post("/comments/new", (req, res) -> {
-            String postIdAsString = req.queryParams("post-id-for-comment");
-            UUID postId = UUID.fromString(postIdAsString);
-            String content = req.queryParams("comment");
-            UUID userId = req.session().attribute("userId");
-            String authorName = model.getNameByID(userId);
-            model.createComment(content, userId, postId, authorName);
-            res.redirect("/posts");
+            Boolean isSignedIn = req.session().attribute("isSignedIn");
+            if (isSignedIn == true) {
+                String postIdAsString = req.queryParams("post-id-for-comment");
+                UUID postId = UUID.fromString(postIdAsString);
+                String content = req.queryParams("comment");
+                UUID userId = req.session().attribute("userId");
+                String authorName = model.getNameByID(userId);
+                model.createComment(content, userId, postId, authorName);
+                res.redirect("/posts");
+            }else {
+                res.redirect("/");
+            }
             return null;
         });
 
         post("/comments/delete", (req, res) -> {
+            UUID currentUserId = req.session().attribute("userId");
             String commentIdAsString = req.queryParams("comment-id-delete");
             UUID deleteCommentId = UUID.fromString(commentIdAsString);
             UUID commentAuthorId = model.getCommentAuthorId(deleteCommentId);
-            model.deleteCommentByUser(deleteCommentId, commentAuthorId);
-            res.redirect("/posts");
+            if(currentUserId.equals(commentAuthorId)) {
+                model.deleteCommentByUser(deleteCommentId, commentAuthorId);
+                res.redirect("/posts");
+            }else{
+                res.redirect("/posts");
+            }
             return null;
         });
 
