@@ -8,9 +8,11 @@ feature 'Creating and viewing a post' do
         click_button('Sign up')
 
         visit('/posts')
-        fill_in :post, with: 'This is the first test post'
+        sleep 1
+        fill_in "post", with: 'This is the first test post'
+        sleep 2
         click_button('Post')
-        expect(page).to have_content 'This is the first test post'
+        expect(page).to have_content /This is the first test post/
     end
 
 
@@ -20,8 +22,10 @@ feature 'Creating and viewing a post' do
        fill_in "login-password", with: "password123"
        click_button('Log in')
        visit '/posts'
-       fill_in :post, with: "This is another test post"
+       sleep 1
+       fill_in "post", with: "This is another test post"
+       sleep 2
        click_button("Post")
-       expect(page).to have_content "This is another test post"
+       expect(page).to have_content /This is another test post/
     end
 end

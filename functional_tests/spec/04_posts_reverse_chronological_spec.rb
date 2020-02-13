@@ -7,9 +7,9 @@ feature 'posts are displayed in reverse chronological order' do
     click_button('Sign up')
 
     visit('/posts')
-    fill_in :post, with: 'This is the first test post'
+    fill_in "post", with: 'This is the first test post'
     click_button 'Submit'
-    fill_in :post, with: 'This is the second test post'
+    fill_in "post", with: 'This is the second test post'
     click_button 'Submit'
 
     expect("This is the second test post").to appear_before("This is the first test post")
