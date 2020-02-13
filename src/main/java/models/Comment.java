@@ -33,9 +33,9 @@ public class Comment {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = sdf.parse(this.time_stamp);
         SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
-        SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm:ss z");
         String dateStr = sdfDate.format(date);
         String timeStr = sdfTime.format(date);
-        return "on: " + dateStr + " at: " + timeStr;
+        return "on " + dateStr + " at " + timeStr;
     }
 }

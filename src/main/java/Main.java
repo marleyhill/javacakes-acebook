@@ -190,11 +190,6 @@ public class Main {
             return null;
         });
 
-        internalServerError((req, res) -> {
-            res.type("application/json");
-            return "Email already exists, please try again";
-        });
-
         post("/posts/likes", (req, res) -> {
             UUID userId = req.session().attribute("userId");
             String idAsString = req.queryParams("post-id-for-like");
@@ -212,5 +207,12 @@ public class Main {
             res.redirect("/posts");
             return null;
         });
+
+
+        internalServerError((req, res) -> {
+            res.type("application/json");
+            return "Email already exists, please try again";
+        });
+
     }
 }
