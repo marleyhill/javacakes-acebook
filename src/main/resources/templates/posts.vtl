@@ -26,7 +26,7 @@
   </head>
 
 
-   <body class="w3-theme-l5">
+  <body class="w3-theme-l5">
 
     <!-- Navbar -->
     <div class="w3-top">
@@ -56,23 +56,24 @@
     <!-- Middle Column -->
     <div class="w3-col m7">
 
-      <div class="w3-row-padding">
-        <div class="w3-col m12">
-          <div class="w3-card w3-round w3-white">
-            <div class="w3-container w3-padding">
-                <h6 class="w3-opacity">Welcome to acebook, $name </h6>
-                <form action='/posts/new' method="POST">
-                    <input contenteditable="true" id="post" name="post" class="w3-border w3-padding" style="width:95%"></input>
-                    <br>
-                    <button type="Submit" name="Submit" value="Submit" class="w3-button w3-theme"><i class="fa fa-pencil"></i>  Post</button>
-                </form>
+        <!-- New post container -->
+          <div class="w3-row-padding">
+            <div class="w3-col m12">
+              <div class="w3-card w3-round w3-white">
+                <div class="w3-container w3-padding">
+                    <h6 class="w3-opacity">Welcome to acebook, $name </h6>
+                    <form action='/posts/new' method="POST">
+                        <input contenteditable="true" id="post" name="post" class="w3-border w3-padding" style="width:95%"></input>
+                        <br><br>
+                        <button type="Submit" name="Submit" value="Submit" class="w3-button w3-theme"><i class="fa fa-pencil"></i>  Post</button>
+                    </form>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
 
-
-      <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
+        <!-- Post container -->
+      <br>
           <ul style="list-style-type:none;">
           #foreach($p in $posts)
             #set($allLikes = $modelMethods.getPostLikesByPostId($p.post_id))
@@ -82,99 +83,61 @@
                     #end
                  </li>
 
-            <span class="w3-right w3-opacity">posted $p.getTimeStamp()</span>
-            <h4>By $p.name</h4><br>
-            <hr class="w3-clear">
-            <p>$p.content</p>
+            <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
 
-                <p>$allLikes likes<form action='/posts/likes' method="POST">
-                  <button name="post-id-for-like" value="$p.getPostID()" type="submit" class="w3-button w3-theme-d1 w3-margin-bottom btn btn-success"><i class="fa fa-thumbs-up"></i>  Like</button>
-                </form></p>
+                <!-- Post header -->
+                <span class="w3-right w3-opacity">posted $p.getTimeStamp()</span>
+                <h4>By $p.name</h4><br>
+                <hr class="w3-clear">
+                <p>$p.content</p>
 
+                <!-- All likes -->
+                <form action='/posts/likes' method="POST">
+                  $allLikes likes <button name="post-id-for-like" value="$p.getPostID()" type="submit" class="w3-button w3-theme-d1 w3-margin-bottom btn btn-success"><i class="fa fa-thumbs-up"></i>  Like</button>
+                </form>
+
+                <!-- Delete comment -->
+                <form action="/posts/delete" method="post">
+                    <input type='hidden' name='method' value='DELETE'>
+                    <button name="post-id-delete" value="$p.post_id" type="submit" class="w3-button w3-theme-d2 w3-margin-bottom btn btn-danger"><i class="fa fa-remove"></i>  Delete post</button>
+                </form>
+
+                    <!-- Add comment container -->
                     <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
+                        <form action='/comments/new' method="POST">
+                          <input id="comment" type="text" name="comment" placeholder="Add comment">
+                          <button name="post-id-for-comment" value="$p.getPostID()" type="submit" class="w3-button w3-theme-d2 w3-margin-bottom btn btn-primary"><i class="fa fa-comment"></i>  Comment</button>
+                       </form>
+                       <!-- Add comment container ends -->
+                    </div>
+
+
+                        <!-- Comment container -->
                         <ul style="list-style-type:none;">
                             #set($commentsByPostId = $modelMethods.getCommentsByPostId($p.post_id))
                              #foreach($comment in $commentsByPostId)
                                  #set($allCommentLikes = $modelMethods.getCommentLikesByCommentId($comment.comment_id))
+                                    <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
+                                    <span class="w3-right w3-opacity">posted $comment.getTimeStamp()</span>
+                                    Posted by $comment.name
                                     <p>$comment.content</p>
                                     <form action='/comments/likes' method="POST">
-                                         $allCommentLikes likes <button name="comment-id-for-like" value="$comment.getCommentId()" type="submit" class="w3-button w3-theme-d2 w3-margin-bottom btn btn-success">Like</button>
+                                         $allCommentLikes likes <button name="comment-id-for-like" value="$comment.getCommentId()" type="submit" class="w3-button w3-theme-d2 w3-margin-bottom btn btn-success"><i class="fa fa-thumbs-up"></i>  Like</button>
                                     </form>
-                              #end
+                                    <form action="/comments/delete" method="POST">
+                                         <input type='hidden' name='method' value='DELETE'>
+                                         <button name="comment-id-delete" value="$comment.comment_id" type="submit" class="w3-button w3-theme-d2 w3-margin-bottom btn btn-danger"><i class="fa fa-remove"></i>  Delete comment</button>
+                                     </form>
+                                     </div>
 
+                              #end
                         </ul>
 
-                    </div>
-
-
-                 <ul>
-                     #set($commentsByPostId = $modelMethods.getCommentsByPostId($p.post_id))
-                     #foreach($comment in $commentsByPostId)
-                     #set($allCommentLikes = $modelMethods.getCommentLikesByCommentId($comment.comment_id))
-                     <li>
-                        $comment.content
-                        <div class="likes">
-
-                          <p>$allCommentLikes likes</p>
-                        </div>
-
-                     </li>
-                     <form action="/comments/delete" method="POST">
-                         <input type='hidden' name='method' value='DELETE'>
-                         <button name="comment-id-delete" value="$comment.comment_id" type="submit" class="btn btn-danger">Delete comment</button>
-                     </form>
-                     #end
-                   </ul>
-
-                   <form action='/comments/new' method="POST">
-                                       <input id="comment" type="text" name="comment" placeholder="Add comment">
-                                       <button name="post-id-for-comment" value="$p.getPostID()" type="submit" class="w3-button w3-theme-d2 w3-margin-bottom btn btn-primary"><i class="fa fa-comment"></i>  Comment</button>
-                                    </form>
-
-           #end
+            </div>
+          #end
         <br>
-      </div>
-  
-    <ul style="list-style-type:none;">
-        #foreach($p in $posts)
-        #set($allLikes = $modelMethods.getPostLikesByPostId($p.post_id))
-        <li id="post-$p.post_id">
-            #if ($p.post_id == $deletePostId && $deletePostError == true)
-            <br> <p><b>You can only delete your own posts!</b></p>
-            #end
 
-
-          <ul>
-            #set($commentsByPostId = $modelMethods.getCommentsByPostId($p.post_id))
-            #foreach($comment in $commentsByPostId)
-            #set($allCommentLikes = $modelMethods.getCommentLikesByCommentId($comment.comment_id))
-            <li>
-               $comment.content
-               <div class="likes">
-                 <form action='/comments/likes' method="POST">
-                    <button name="comment-id-for-like" value="$comment.getCommentId()" type="submit" class="btn btn-success">Like</button>
-                 </form>
-                 <p style="position:relative; left:60px; bottom:25px">$allCommentLikes likes</p>
-               </div>
-               Posted by $comment.name $comment.getTimeStamp()
-            </li>
-            <form action="/comments/delete" method="POST">
-                <input type='hidden' name='method' value='DELETE'>
-                <button name="comment-id-delete" value="$comment.comment_id" type="submit" class="btn btn-danger">Delete comment</button>
-            </form>
-            #end
-          </ul>
-         <br> <form action="/posts/delete" method="post">
-            <input type='hidden' name='method' value='DELETE'>
-            <button name="post-id-delete" value="$p.post_id" type="submit" class="btn btn-danger">Delete post</button>
-          </form><br>
-        </li>
-        #end
-
-    </ul>
-    </div>
-    </div>
-    </div>
+    <!-- Middle container ends -->
     </div>
   </body>
 
