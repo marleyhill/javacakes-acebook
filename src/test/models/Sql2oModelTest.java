@@ -215,4 +215,22 @@ class Sql2oModelTest {
         model.createLike(testUserID, postId);
         assertEquals(model.getPostLikesByPostId(postId), 2);
     }
+
+    @Test
+    void isLikeExisting() {
+        Model model = new Sql2oModel(sql2o);
+        UUID userID = model.getUserId("person1@test.com");
+        model.createLike(userID, postId);
+        assertThat(model.isLikeExisting(userID, postId), instanceOf(Boolean.class));
+    }
+
+
+    @Test
+    void cannotCreateLikeWithSameCredentialsTwice() {
+        Model model = new Sql2oModel(sql2o);
+        UUID testUserID = model.getUserId("person1@test.com");
+        model.createLike(testUserID, postId);
+        model.createLike(testUserID, postId);
+        assertEquals(model.getPostLikesByPostId(postId), 1);
+    }
 }
