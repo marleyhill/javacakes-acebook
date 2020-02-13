@@ -9,18 +9,48 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <style>
   html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
+  * {
+    box-sizing: border-box;
+  }
+  #box {
+    float:left;
+    width:25%;
+    height:300px;
+    padding: 20px;
+    margin-top: 30px;
+    margin-left: 10px;
+  }
+
+  .clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+
   </style>
   </head>
 
-  <body class="w3-theme-l5">
-    <div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">
-        <div class="container">
-            <h2>Welcome to Acebook</h2>
-        </div>
 
-        <div class="container">
+  <body class="w3-theme-l5">
+
+    <!-- Navbar -->
+     <div class="w3-top">
+          <div class="w3-bar w3-theme-d2 w3-left-align w3-large">
+              <div class="w3-bar-item w3-hide-small w3-padding-large">
+                  <h2 style="font-weight:bold"><i class="fa fa-globe"></i>   Welcome to Acebook </h2>
+              </div>
+
+          </div>
+      </div>
+
+  <!-- page container -->
+  <div class="w3-container w3-content clearfix" style="max-width:1400px;margin-top:80px">
+
+    <div
+
+        <div id="box" class="box left w3-theme-d2">
             <div class="signup">
-              <h3>Sign up to Acebook here</h3>
+              <h3>Sign up to Acebook </h3>
               <form action="/user/new" method="POST">
                 Name:<br>
                 <input type="text" name="name">
@@ -34,29 +64,29 @@
                 <input type="submit" value="Sign up" name="signup">
               </form>
             </div>
-         </div
+         </div>
 
+        <div id="box" class="box w3-theme-d2">
+            <div class="signin">
 
-    <div class="container">
-        <div class="signin">
+                <h3>Already a member?</h3>
+                <h4> Log in here </h4>
 
-        <h3>Already a member? Log in here: </h3>
+                    #if ($loginError == true)
+                        <p>Wrong email or password, please try again</p>
+                    #end
 
-            #if ($loginError == true)
-                <p>Wrong email or password, please try again</p>
-            #end
-
-         <form action="/session" method="POST">
-           Email:<br>
-           <input type="text" name="login-email">
-           <br>
-           Password:<br>
-           <input type="text" name="login-password">
-           <br><br>
-           <input type="submit" value="Log in">
-         </form>
+                <form action="/session" method="POST">
+                   Email:<br>
+                   <input type="text" name="login-email">
+                   <br>
+                   Password:<br>
+                   <input type="text" name="login-password">
+                   <br><br>
+                   <input type="submit" value="Log in">
+                </form>
+            </div>
         </div>
-    </div>
     </div>
 
   </body>
