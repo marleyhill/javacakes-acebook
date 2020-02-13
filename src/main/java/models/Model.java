@@ -33,6 +33,7 @@ public interface Model {
     int getPostLikesByPostId(UUID postId);
 
     UUID createCommentLike(UUID userId, UUID commentId);
+    Boolean isCommentLikeExisting(UUID userID, UUID commentID);
 
     int getCommentLikesByCommentId(UUID commentId);
 

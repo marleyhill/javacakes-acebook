@@ -202,6 +202,14 @@ public class Sql2oModel implements Model {
     }
 
     @Override
+    public Boolean isCommentLikeExisting(UUID userID, UUID commentID){
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery("select exists(select 1 from comment_likes where comment_id = '" + commentID + "' and user_id = '" + userID + "')")
+                    .executeScalar(Boolean.class);
+        }
+    }
+
+    @Override
     public UUID createLike(UUID userID, UUID postID) {
         Boolean isExisting = isLikeExisting(userID, postID);
         if(isExisting == false) {
@@ -232,6 +240,8 @@ public class Sql2oModel implements Model {
 
     @Override
     public UUID createCommentLike(UUID userId, UUID commentId) {
+        Boolean isExisting = isCommentLikeExisting(userId, commentId);
+        if(isExisting == false) {
         try (Connection conn = sql2o.beginTransaction()) {
             UUID commentLikeId = UUID.randomUUID();
             conn.createQuery("INSERT INTO comment_likes (comment_like_id, user_id, comment_id) VALUES (:comment_like_id, :user_id, :comment_id)")
@@ -241,6 +251,9 @@ public class Sql2oModel implements Model {
                     .executeUpdate();
             conn.commit();
             return commentLikeId;
+            }
+        } else {
+            return null;
         }
     }
 

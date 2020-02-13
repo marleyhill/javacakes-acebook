@@ -197,12 +197,9 @@ public class Main {
 
         post("/posts/likes", (req, res) -> {
             UUID userId = req.session().attribute("userId");
-            System.out.println("userID: " + userId);
             String idAsString = req.queryParams("post-id-for-like");
-            System.out.println("post id for like: " + idAsString);
             UUID postIdRetrieved = UUID.fromString(idAsString);
-            System.out.println("post id retrieved: " + postIdRetrieved);
-            System.out.println(model.createLike(userId, postIdRetrieved));
+            model.createLike(userId, postIdRetrieved);
             res.redirect("/posts");
             return null;
         });
