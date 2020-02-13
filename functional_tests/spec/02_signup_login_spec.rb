@@ -10,7 +10,7 @@ feature 'user can sign up' do
         expect(page).to have_content /Welcome to Acebook, My name/
    end
 
-   scenario 'User can sign in' do
+   scenario 'User can log in' do
         visit '/'
 
         fill_in "login-email", with: "email@me.com"
