@@ -7,7 +7,7 @@ feature 'user can sign up' do
         fill_in "email", with: "email@me.com"
         fill_in "password", with: "password123"
         click_button('Sign up')
-        expect(page).to have_content 'Welcome to Acebook, My name'
+        expect(page).to have_content /Welcome to Acebook, My name/
    end
 
    scenario 'User can log in' do
@@ -16,7 +16,7 @@ feature 'user can sign up' do
         fill_in "login-email", with: "email@me.com"
         fill_in "login-password", with: "password123"
         click_button('Log in')
-        expect(page).to have_content 'Welcome to Acebook, My name'
+        expect(page).to have_content /Welcome to Acebook, My name/
    end
 
     scenario 'User can sign out' do
@@ -26,7 +26,7 @@ feature 'user can sign up' do
         fill_in "login-password", with: "password123"
         click_button('Log in')
         click_button('Sign out')
-        expect(page).not_to have_content 'Welcome to Acebook, My name'
+        expect(page).not_to have_content /Welcome to Acebook, My name/
    end
 
    scenario 'User can only sign up once' do
