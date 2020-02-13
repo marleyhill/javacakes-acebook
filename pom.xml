@@ -22,13 +22,17 @@
                 <artifactId>heroku-maven-plugin</artifactId>
                 <version>2.0.6</version>
                 <configuration>
+                    <includeTarget>false</includeTarget>
+                    <includes>
+                        <include>target/acebook-1.0-SNAPSHOT.jar</include>
+                    </includes>
                     <jdkVersion>1.8</jdkVersion>
                     <!-- Use your own application name -->
                     <appName>javacakes-acebook</appName>
                     <processTypes>
                         <!-- Tell Heroku how to launch your application -->
                         <!-- You might have to remove the ./ in front   -->
-                        <web>java -jar target/acebook-1.0-SNAPSHOT-jar-with-dependencies.jar</web>
+                        <web>java -jar target/acebook-1.0-SNAPSHOT.jar</web>
                     </processTypes>
                 </configuration>
             </plugin>
