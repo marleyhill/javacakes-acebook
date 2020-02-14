@@ -15,7 +15,6 @@ feature 'Creating and viewing a post' do
         expect(page).to have_content /This is the first test post/
     end
 
-
     scenario 'User can create and view post on posts page' do
        visit '/'
        fill_in "login-email", with: "email@me.com"

@@ -130,7 +130,7 @@ class Sql2oModelTest {
 
         Model model = new Sql2oModel(sql2o);
         model.createPost("Test Post", userId, "test user");
-        assertEquals(model.getAllPosts().size(), 3);
+        assertEquals(model.getAllPosts().size(), 2);
         assertThat(model.getAllPosts(), hasToString(containsString("Test Post")));
     }
 
@@ -233,8 +233,10 @@ class Sql2oModelTest {
     void getPostLikesByPostId() {
         Model model = new Sql2oModel(sql2o);
         UUID testUserID = model.getUserId("person1@test.com");
+        model.createUser("Test Person 2", "person2@test.com", "password");
+        UUID testUserID2 = model.getUserId("person2@test.com");
         model.createLike(testUserID, postId);
-        model.createLike(testUserID, postId);
+        model.createLike(testUserID2, postId);
         assertEquals(model.getPostLikesByPostId(postId), 2);
     }
 
