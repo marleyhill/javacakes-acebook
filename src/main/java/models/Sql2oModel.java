@@ -15,8 +15,6 @@ public class Sql2oModel implements Model {
 
     }
 
- //   UUID userId = UUID.fromString("49921d6e-e210-4f68-ad7a-afac266278cb");
-
     @Override
     public Boolean isUserExisting(String name, String email){
         try (Connection conn = sql2o.open()) {
