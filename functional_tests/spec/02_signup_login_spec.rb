@@ -35,7 +35,7 @@ feature 'user can sign up' do
         fill_in "email", with: "email@me.com"
         fill_in "password", with: "password123"
         click_button('Sign up')
-        expect(page).to have_content 'Email already exists, please try again'
+        expect(page).to have_content 'Email or name already exists. Try again. Go back'
 
     end
 
