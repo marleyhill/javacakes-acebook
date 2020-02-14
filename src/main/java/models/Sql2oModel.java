@@ -18,19 +18,30 @@ public class Sql2oModel implements Model {
  //   UUID userId = UUID.fromString("49921d6e-e210-4f68-ad7a-afac266278cb");
 
     @Override
-    public UUID createUser(String name, String email, String password) {
-        try (Connection conn = sql2o.beginTransaction()) {
-            UUID userId = UUID.randomUUID();
-            conn.createQuery("insert into users(user_id, name, email, password) VALUES (:user_id, :name, :email, :password)")
-                    .addParameter("user_id", userId)
-                    .addParameter("name", name)
-                    .addParameter("email", email)
-                    .addParameter("password", password)
-                    .executeUpdate();
-            conn.commit();
-            return userId;
+    public Boolean isUserExisting(String name, String email){
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery("select exists(select 1 from users where name = '" + name + "' or email = '" + email + "')")
+                    .executeScalar(Boolean.class);
         }
+    }
 
+    @Override
+    public UUID createUser(String name, String email, String password) {
+        if(!isUserExisting(name, email)) {
+            try (Connection conn = sql2o.beginTransaction()) {
+                UUID userId = UUID.randomUUID();
+                conn.createQuery("insert into users(user_id, name, email, password) VALUES (:user_id, :name, :email, :password)")
+                        .addParameter("user_id", userId)
+                        .addParameter("name", name)
+                        .addParameter("email", email)
+                        .addParameter("password", password)
+                        .executeUpdate();
+                conn.commit();
+                return userId;
+            }
+        }else {
+            return null;
+        }
     }
 
     @Override

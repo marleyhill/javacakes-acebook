@@ -1,7 +1,7 @@
 CREATE TABLE  users (
     user_id VARCHAR UNIQUE,
     name VARCHAR(40),
-    email VARCHAR(60) UNIQUE,
+    email VARCHAR(60),
     password VARCHAR(80)
 );
 

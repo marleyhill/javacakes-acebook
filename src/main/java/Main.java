@@ -54,14 +54,17 @@ public class Main {
             String name  = req.queryParams("name");
             String email = req.queryParams("email");
             String password = req.queryParams("password");
-
-            UUID userId = model.createUser(name, email, password);
-            req.session().attribute("name", name);
-            req.session().attribute("userId", userId);
-            req.session().attribute("isSignedIn", true);
-            req.session().attribute("deletePostError", false);
-            res.redirect("/posts");
-            return null;
+            if (!model.isUserExisting(name, email)) {
+                UUID userId = model.createUser(name, email, password);
+                req.session().attribute("name", name);
+                req.session().attribute("userId", userId);
+                req.session().attribute("isSignedIn", true);
+                req.session().attribute("deletePostError", false);
+                res.redirect("/posts");
+                return null;
+            }else {
+                return "Email or name already exists. Try again. <html><body><a href='/'>Go back</a></body></html>";
+            }
         });
 
         post("/session", (req, res) -> {
@@ -211,7 +214,7 @@ public class Main {
 
         internalServerError((req, res) -> {
             res.type("application/json");
-            return "Email already exists, please try again";
+            return "Something went wrong, <a href='/'>please try again</a>";
         });
 
     }

@@ -12,6 +12,7 @@ public interface Model {
     void deletePostByUser(UUID postId, UUID userId);
 
     UUID createUser(String name, String email, String password);
+    Boolean isUserExisting(String name, String email);
     List getAllUsers();
     boolean authenticate(String email, String password);
     String getName(String email);

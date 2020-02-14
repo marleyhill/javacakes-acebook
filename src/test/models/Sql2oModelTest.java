@@ -81,6 +81,35 @@ class Sql2oModelTest {
     }
 
     @Test
+    void isUserExistingTrueWithMatchingEmailOnly() {
+        Model model = new Sql2oModel(sql2o);
+        model.createUser("Test Person 2", "person2@test.com", "password");
+        assertEquals(model.isUserExisting("Test Person 4", "person2@test.com"), true);
+    }
+
+    @Test
+    void isUserExistingFalse() {
+        Model model = new Sql2oModel(sql2o);
+        model.createUser("Test Person 3", "person3@test.com", "password");
+        assertEquals(model.isUserExisting("Test Person 2", "person2@test.com"), false);
+    }
+
+    @Test
+    void cannotCreateUserWithExistingName() {
+        Model model = new Sql2oModel(sql2o);
+        model.createUser("Test Person 1", "person2@test.com", "password");
+        assertEquals(model.getAllUsers().size(), 1);
+    }
+
+    @Test
+    void cannotCreateUserWithExistingEmail() {
+        Model model = new Sql2oModel(sql2o);
+        model.createUser("Test Person 3", "person3@test.com", "password");
+        model.createUser("Test Person 2", "person3@test.com", "password");
+        assertEquals(model.getAllUsers().size(), 2);
+    }
+
+    @Test
     void authenticate() {
         Model model = new Sql2oModel(sql2o);
         boolean signInAttempt = model.authenticate("person1@test.com", "password");
@@ -128,13 +157,6 @@ class Sql2oModelTest {
         assertEquals(model.getAllPosts().size(), 0);
     }
 
-//    @Test
-//    void deletesPostByAuthorOnly() {
-//        Model model = new Sql2oModel(sql2o);
-//        UUID newUserId = UUID.fromString("59921d6e-e210-4f68-ad7a-afac266278cb");
-//        model.deletePostByUser(postId, newUserId);
-//        assertThrows();
-//    }
 
     @Test
     void getAllPostsHaveTimestamps() {
